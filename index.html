@@ -1,10 +1,9 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Resilience coaching for uncertain times. AI-powered assessment and daily guidance.">
-    <title>GetEnergyBack - Resilience in Uncertain Times</title>
+    <title>GetEnergyBack - Resilience Coaching</title>
     <style>
         :root {
             --primary: #1F3A5F;
@@ -18,802 +17,844 @@
         }
         
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui;
         }
         
+        html { scroll-behavior: smooth; }
         body {
-            background: var(--bg);
+            background: linear-gradient(135deg, var(--bg) 0%, #1a1f2e 100%);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.65;
         }
         
         .container {
-            max-width: 600px;
+            max-width: 740px;
             margin: 0 auto;
             padding: 20px;
         }
         
-        /* NAV */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 0;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--line);
         }
         
         .logo {
-            font-size: 1.4rem;
-            font-weight: 800;
+            font-size: 1.3rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
             background: linear-gradient(135deg, var(--accent), #FFD700);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         
-        .nav-badge {
-            font-size: 0.8rem;
-            color: var(--sub);
-            padding: 4px 12px;
-            border: 1px solid var(--line);
-            border-radius: 20px;
+        .progress-bar {
+            height: 3px;
+            background: var(--line);
+            border-radius: 10px;
+            margin-bottom: 35px;
+            overflow: hidden;
         }
         
-        /* TYPOGRAPHY */
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #FFD700);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        
+        .screen {
+            display: none;
+            animation: slideIn 0.4s ease;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         h1 {
             font-size: 2rem;
-            line-height: 1.25;
-            margin-bottom: 10px;
+            margin-bottom: 14px;
             color: #FFFFFF;
+            font-weight: 900;
+            line-height: 1.2;
         }
         
-        h3 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            font-weight: 700;
+        h2 {
+            font-size: 1.4rem;
+            margin-bottom: 14px;
+            color: #FFFFFF;
+            font-weight: 800;
         }
         
-        p {
+        .subtitle {
+            color: var(--sub);
+            margin-bottom: 28px;
+            font-size: 0.98rem;
             line-height: 1.6;
         }
         
-        .small {
-            font-size: 0.9rem;
+        .question {
+            margin-bottom: 26px;
+        }
+        
+        .question-text {
+            font-weight: 700;
+            margin-bottom: 14px;
+            font-size: 0.96rem;
+            color: #FFFFFF;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            margin-top: 3px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            accent-color: var(--accent);
+            flex-shrink: 0;
+        }
+        
+        .checkbox-label {
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .checkbox-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+        }
+        
+        .checkbox-desc {
+            font-size: 0.84rem;
             color: var(--sub);
         }
         
-        /* BUTTONS */
+        .scale-input {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 9px;
+            margin-top: 12px;
+        }
+        
+        .scale-btn {
+            padding: 11px;
+            border: 1.5px solid var(--line);
+            background: var(--card);
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.83rem;
+            transition: all 0.25s ease;
+        }
+        
+        .scale-btn:hover {
+            border-color: var(--accent);
+            background: rgba(227, 178, 60, 0.08);
+        }
+        
+        .scale-btn.selected {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+        
         .btn {
             width: 100%;
-            padding: 14px;
+            padding: 13px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: 700;
             cursor: pointer;
+            font-size: 0.98rem;
             transition: all 0.3s ease;
+            margin-top: 26px;
         }
         
         .btn-primary {
             background: linear-gradient(135deg, var(--accent), #FFD700);
             color: #000;
-            box-shadow: 0 4px 12px rgba(227, 178, 60, 0.3);
+            box-shadow: 0 4px 12px rgba(227, 178, 60, 0.2);
         }
         
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(227, 178, 60, 0.4);
+            box-shadow: 0 8px 24px rgba(227, 178, 60, 0.3);
         }
         
-        /* CARDS */
-        .card {
-            background: var(--card);
-            padding: 24px;
-            border-radius: 16px;
-            margin-top: 20px;
-            border: 1px solid var(--line);
-            transition: all 0.3s ease;
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
-        .card:hover {
-            border-color: var(--accent);
-            background: rgba(18, 24, 33, 0.8);
-        }
-        
-        /* OPTIONS */
-        .option {
-            border: 1.5px solid var(--line);
-            padding: 16px;
-            border-radius: 12px;
-            margin-top: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-        
-        .option:hover {
-            border-color: var(--accent);
-            background: rgba(227, 178, 60, 0.05);
-        }
-        
-        .option.selected {
-            border-color: var(--accent);
-            background: rgba(227, 178, 60, 0.1);
+        .btn-secondary {
+            background: transparent;
             color: var(--accent);
+            border: 1.5px solid var(--accent);
+            margin-top: 12px;
         }
         
-        /* SECTION */
-        .section {
+        .btn-secondary:hover {
+            background: rgba(227, 178, 60, 0.1);
+        }
+        
+        .diagnosis-box {
+            background: rgba(227, 178, 60, 0.06);
+            border: 1px solid rgba(227, 178, 60, 0.25);
+            padding: 26px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .diagnosis-section {
+            margin-bottom: 26px;
+        }
+        
+        .diagnosis-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .diagnosis-label {
+            color: var(--accent);
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.73rem;
+            margin-bottom: 10px;
+            letter-spacing: 0.8px;
+        }
+        
+        .diagnosis-text {
+            color: var(--text);
+            font-size: 0.96rem;
+            line-height: 1.75;
+        }
+        
+        .practice-box {
+            background: var(--card);
+            border: 1px solid var(--line);
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .practice-box:hover {
+            border-color: var(--accent);
+            background: rgba(227, 178, 60, 0.04);
+        }
+        
+        .practice-title {
+            color: var(--accent);
+            font-weight: 800;
+            margin-bottom: 6px;
+            font-size: 0.94rem;
+        }
+        
+        .practice-time {
+            color: var(--sub);
+            font-size: 0.82rem;
+            margin-bottom: 9px;
+        }
+        
+        .practice-desc {
+            color: var(--text);
+            font-size: 0.90rem;
+            line-height: 1.65;
+        }
+        
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(31, 58, 95, 0.95);
+            border: 1px solid var(--line);
+            padding: 9px 13px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--accent);
+            z-index: 1000;
+        }
+        
+        .paywall-box {
+            background: rgba(76, 175, 80, 0.08);
+            border: 1.5px solid rgba(76, 175, 80, 0.3);
+            padding: 26px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .paywall-price {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--accent);
+            margin: 18px 0 8px 0;
+        }
+        
+        .paywall-period {
+            color: var(--sub);
+            font-size: 0.88rem;
+            margin-bottom: 22px;
+        }
+        
+        .paywall-benefits {
+            text-align: left;
             margin-top: 20px;
-            padding-top: 15px;
+            padding-top: 18px;
             border-top: 1px solid var(--line);
         }
         
-        .label {
-            font-size: 0.8rem;
-            color: var(--accent);
-            margin-bottom: 8px;
-            display: block;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .value {
-            font-weight: 700;
-            color: #FFFFFF;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        
-        /* RESULT BOX */
-        .result {
-            display: none;
-            margin-top: 20px;
-            padding: 24px;
-            border-radius: 16px;
-            background: rgba(227, 178, 60, 0.05);
-            border: 1px solid rgba(227, 178, 60, 0.2);
-        }
-        
-        .result.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .result h4 {
-            color: var(--accent);
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-        }
-        
-        /* ELEMENT BADGE */
-        .element-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            background: rgba(227, 178, 60, 0.15);
-            border: 1px solid var(--accent);
-            border-radius: 20px;
-            color: var(--accent);
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-top: 10px;
-        }
-        
-        /* SOCIAL PROOF */
-        .social-proof {
+        .benefit-item {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 15px;
-            padding: 12px;
-            background: rgba(76, 175, 80, 0.1);
-            border: 1px solid rgba(76, 175, 80, 0.3);
-            border-radius: 10px;
-            font-size: 0.85rem;
+            gap: 9px;
+            margin-bottom: 10px;
+            font-size: 0.89rem;
         }
         
-        .social-proof strong {
+        .benefit-icon {
             color: var(--success);
-        }
-        
-        /* PAYWALL */
-        .paywall {
-            display: none;
-            margin-top: 20px;
-            padding: 24px;
-            border-radius: 16px;
-            background: rgba(227, 178, 60, 0.08);
-            border: 2px solid var(--accent);
-            text-align: center;
-        }
-        
-        .paywall.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-        
-        .paywall h3 {
-            color: var(--accent);
-            margin-bottom: 8px;
-        }
-        
-        /* DAILY SYSTEM */
-        .daily {
-            display: none;
-        }
-        
-        .daily.show {
-            display: block;
-        }
-        
-        .streak-counter {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 12px;
-            background: rgba(227, 178, 60, 0.1);
-            border-radius: 10px;
-        }
-        
-        .streak-value {
-            font-size: 1.8rem;
             font-weight: 800;
-            color: var(--accent);
+            flex-shrink: 0;
         }
         
-        /* SLIDER */
-        .slider {
-            width: 100%;
-            margin-top: 15px;
-            height: 8px;
+        .error-msg {
+            background: rgba(244, 67, 54, 0.15);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #FF6B6B;
+            padding: 11px;
             border-radius: 8px;
-            background: linear-gradient(to right, #4B5EFC, var(--accent), #FFD700);
-            outline: none;
-            -webkit-appearance: none;
-            appearance: none;
-            cursor: pointer;
+            margin-bottom: 18px;
+            font-size: 0.88rem;
         }
         
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #FFFFFF;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(227, 178, 60, 0.4);
-            border: 2px solid var(--accent);
-        }
-        
-        .slider::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #FFFFFF;
-            cursor: pointer;
-            border: 2px solid var(--accent);
-            box-shadow: 0 2px 8px rgba(227, 178, 60, 0.4);
-        }
-        
-        .slider-label {
+        .summary-stat {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
-            color: var(--sub);
-            margin-bottom: 8px;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--line);
+            font-size: 0.93rem;
         }
         
-        /* HISTORY */
-        .history {
-            margin-top: 20px;
-            font-size: 0.9rem;
+        .summary-stat:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
             color: var(--sub);
         }
         
-        .history-item {
-            margin-top: 6px;
-            padding: 6px 0;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .history-item .value {
+        .stat-value {
             color: var(--accent);
             font-weight: 700;
         }
         
-        /* EXERCISES */
-        .exercise {
-            background: rgba(227, 178, 60, 0.05);
-            border: 1px solid var(--line);
-            padding: 16px;
-            border-radius: 10px;
-            margin-top: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .exercise:hover {
-            border-color: var(--accent);
-            background: rgba(227, 178, 60, 0.1);
-        }
-        
-        .exercise h4 {
-            color: var(--accent);
-            font-size: 0.95rem;
-            margin-bottom: 4px;
-        }
-        
-        .exercise p {
-            font-size: 0.85rem;
-            color: var(--sub);
-        }
-        
-        /* VISIBILITY */
-        .hidden {
-            display: none;
-        }
-        
-        .visible {
-            display: block;
-        }
-        
-        .error-message {
-            background: rgba(255, 100, 100, 0.1);
-            border: 1px solid rgba(255, 100, 100, 0.3);
-            color: #FF6464;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 600px) {
-            h1 { font-size: 1.6rem; }
-            .container { padding: 15px; }
+        .callout {
+            background: rgba(227, 178, 60, 0.08);
+            border-left: 3px solid var(--accent);
+            padding: 14px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-size: 0.93rem;
+            line-height: 1.7;
         }
     </style>
 </head>
 <body>
+    <div class="timer" id="timer">⏱️ 0:00</div>
+    
     <div class="container">
-        <!-- NAV -->
-        <nav id="nav" class="visible">
+        <nav>
             <div class="logo">⚡ GetEnergyBack</div>
-            <div class="nav-badge" id="navBadge">Day 1</div>
         </nav>
         
-        <!-- HERO SECTION -->
-        <div id="hero" class="visible">
-            <h1>Stay Sharp When Everything's Uncertain</h1>
-            <p class="small">Resilience coaching based on your real situation. Take a 90-second assessment.</p>
-            <button class="btn btn-primary" onclick="app.startQuiz()">Start Assessment</button>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
         </div>
         
-        <!-- QUIZ SECTION -->
-        <div id="quiz" class="card hidden">
-            <h3>What's destabilizing you right now?</h3>
-            <div class="option" onclick="app.selectOption(this, 'job')">
-                <strong>Job Security</strong><br>
-                <span style="font-size: 0.85rem; color: var(--sub);">Fear of losing position or being displaced by AI</span>
+        <!-- SCREEN 1: INTRO -->
+        <div class="screen active" id="screen-intro">
+            <h1>Deine Situation verstehen</h1>
+            <p class="subtitle">
+                Nicht "du bist ängstlich". Sondern: Was passiert gerade wirklich in deinem Körper? 
+                Und wie stoppt man das?
+            </p>
+            
+            <div class="callout">
+                <strong>Du bekommst:</strong> Eine echte Diagnose (nicht Selbsttest-Quiz). Basierend auf Neurowissenschaft 
+                und traditioneller chinesischer Medizin. Und konkrete Praktiken für die nächsten 24 Stunden.
             </div>
-            <div class="option" onclick="app.selectOption(this, 'money')">
-                <strong>Financial Pressure</strong><br>
-                <span style="font-size: 0.85rem; color: var(--sub);">Inflation, rising costs, financial uncertainty</span>
-            </div>
-            <div class="option" onclick="app.selectOption(this, 'overload')">
-                <strong>Information Overload</strong><br>
-                <span style="font-size: 0.85rem; color: var(--sub);">News, work chaos, too many inputs</span>
-            </div>
-            <div class="option" onclick="app.selectOption(this, 'direction')">
-                <strong>Future Uncertainty</strong><br>
-                <span style="font-size: 0.85rem; color: var(--sub);">Unclear next steps, career confusion</span>
-            </div>
-            <button class="btn btn-primary" style="margin-top: 20px;" onclick="app.analyzeSelection()">Analyze Your Situation</button>
+            
+            <p style="color: var(--sub); margin-top: 24px; font-size: 0.92rem;">
+                ⏱️ 9 Minuten | 🔒 Deine Daten sind privat | ✓ Kein BS
+            </p>
+            
+            <button class="btn btn-primary" onclick="startAssessment()">Starte Analyse</button>
         </div>
         
-        <!-- DIAGNOSIS RESULT -->
-        <div id="result" class="result">
-            <h4>Your Situation</h4>
-            <div class="section">
-                <span class="label">Diagnosis</span>
-                <div class="value" id="diagnosis"></div>
+        <!-- SCREEN 2: LIFE AREAS -->
+        <div class="screen" id="screen-areas">
+            <h1>Was drückt Dich gerade?</h1>
+            <p class="subtitle">Wähle 2-3 Bereiche, die Dich JETZT beschäftigen.</p>
+            
+            <div id="error-msg"></div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="job" value="job">
+                <label for="job" class="checkbox-label">
+                    <div class="checkbox-title">💼 Jobsicherheit</div>
+                    <div class="checkbox-desc">Angst vor Jobverlust oder AI-Verdrängung</div>
+                </label>
             </div>
             
-            <div class="section">
-                <span class="label">What's Actually Happening (TCM)</span>
-                <div class="value" id="tcmExplanation"></div>
-                <span class="element-badge" id="elementBadge"></span>
+            <div class="checkbox-item">
+                <input type="checkbox" id="money" value="money">
+                <label for="money" class="checkbox-label">
+                    <div class="checkbox-title">💰 Finanzielle Druck</div>
+                    <div class="checkbox-desc">Inflation, steigende Kosten, finanzielle Unsicherheit</div>
+                </label>
             </div>
             
-            <div class="section">
-                <span class="label">Your Immediate Reset (Next 24h)</span>
-                <div class="value" id="action"></div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="health" value="health">
+                <label for="health" class="checkbox-label">
+                    <div class="checkbox-title">😴 Schlaf & Energie</div>
+                    <div class="checkbox-desc">Schlaflosigkeit, Müdigkeit, körperliche Symptome</div>
+                </label>
             </div>
             
-            <div id="socialProof" style="display: none;">
-                <div class="social-proof">
-                    ✓ <strong>7,843 professionals</strong> have used this assessment this week
+            <div class="checkbox-item">
+                <input type="checkbox" id="relationship" value="relationship">
+                <label for="relationship" class="checkbox-label">
+                    <div class="checkbox-title">💔 Beziehungen & Familie</div>
+                    <div class="checkbox-desc">Partner-Konflikte, Familie, Einsamkeit</div>
+                </label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="news" value="news">
+                <label for="news" class="checkbox-label">
+                    <div class="checkbox-title">📰 News & Welt</div>
+                    <div class="checkbox-desc">Geopolitik, Angst um die Zukunft, ständiges News-Checken</div>
+                </label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="future" value="future">
+                <label for="future" class="checkbox-label">
+                    <div class="checkbox-title">🔮 Zukunfts-Unsicherheit</div>
+                    <div class="checkbox-desc">Karriere unklar, nächste Schritte unbekannt</div>
+                </label>
+            </div>
+            
+            <button class="btn btn-primary" onclick="validateAreas()">Weiter</button>
+        </div>
+        
+        <!-- SCREEN 3: QUICK MENTAL HEALTH CHECK -->
+        <div class="screen" id="screen-phq">
+            <h1>Deine mentale Basis</h1>
+            <p class="subtitle">5 Fragen. Ganz ehrlich antworten.</p>
+            
+            <div class="question">
+                <div class="question-text">Wie oft fühlst Du Dich niedergeschlagen oder hoffnungslos? (letzte 2 Wochen)</div>
+                <div class="scale-input">
+                    <button class="scale-btn" onclick="setPhq('sadness', 0)">Nie</button>
+                    <button class="scale-btn" onclick="setPhq('sadness', 1)">1-2 Tage</button>
+                    <button class="scale-btn" onclick="setPhq('sadness', 2)">5+ Tage</button>
+                    <button class="scale-btn" onclick="setPhq('sadness', 3)">Fast täglich</button>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-text">Wie oft hast Du Schlafprobleme? (Ein- oder Durchschlafen)</div>
+                <div class="scale-input">
+                    <button class="scale-btn" onclick="setPhq('sleep', 0)">Nie</button>
+                    <button class="scale-btn" onclick="setPhq('sleep', 1)">1-2 Nächte</button>
+                    <button class="scale-btn" onclick="setPhq('sleep', 2)">Mehrmals</button>
+                    <button class="scale-btn" onclick="setPhq('sleep', 3)">Jede Nacht</button>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-text">Wie oft fühlst Du Dich müde oder energielos?</div>
+                <div class="scale-input">
+                    <button class="scale-btn" onclick="setPhq('energy', 0)">Nie</button>
+                    <button class="scale-btn" onclick="setPhq('energy', 1)">Manchmal</button>
+                    <button class="scale-btn" onclick="setPhq('energy', 2)">Oft</button>
+                    <button class="scale-btn" onclick="setPhq('energy', 3)">Fast immer</button>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-text">Wie oft fühlst Du Dich nervös, angespannt oder angespannt?</div>
+                <div class="scale-input">
+                    <button class="scale-btn" onclick="setPhq('anxiety', 0)">Nie</button>
+                    <button class="scale-btn" onclick="setPhq('anxiety', 1)">Manchmal</button>
+                    <button class="scale-btn" onclick="setPhq('anxiety', 2)">Oft</button>
+                    <button class="scale-btn" onclick="setPhq('anxiety', 3)">Ständig</button>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-text">Kannst Du Deine Sorgen nicht kontrollieren oder stoppen?</div>
+                <div class="scale-input">
+                    <button class="scale-btn" onclick="setPhq('worry', 0)">Nie</button>
+                    <button class="scale-btn" onclick="setPhq('worry', 1)">Manchmal</button>
+                    <button class="scale-btn" onclick="setPhq('worry', 2)">Oft</button>
+                    <button class="scale-btn" onclick="setPhq('worry', 3)">Ja, immer</button>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="btn-next-tcm" onclick="nextScreen('tcm')" disabled>Weiter</button>
+        </div>
+        
+        <!-- SCREEN 4: TCM QUICK CHECK -->
+        <div class="screen" id="screen-tcm">
+            <h1>Wie funktioniert Dein Körper?</h1>
+            <p class="subtitle">Traditionelle chinesische Medizin hilft hier, Muster zu erkennen.</p>
+            
+            <div class="question">
+                <div class="question-text">Schlafqualität?</div>
+                <div class="scale-input" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <button class="scale-btn" onclick="setTcm('sleep', 'poor')">Sehr schlecht</button>
+                    <button class="scale-btn" onclick="setTcm('sleep', 'ok')">Okay</button>
+                    <button class="scale-btn" onclick="setTcm('sleep', 'good')">Gut</button>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-text">Magst Du eher Wärme oder Kälte?</div>
+                <div class="scale-input" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <button class="scale-btn" onclick="setTcm('temp', 'cold')">Kälte</button>
+                    <button class="scale-btn" onclick="setTcm('temp', 'neutral')">Egal</button>
+                    <button class="scale-btn" onclick="setTcm('temp', 'hot')">Wärme</button>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-text">Verdauung?</div>
+                <div class="scale-input" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <button class="scale-btn" onclick="setTcm('digestion', 'loose')">Locker</button>
+                    <button class="scale-btn" onclick="setTcm('digestion', 'normal')">Normal</button>
+                    <button class="scale-btn" onclick="setTcm('digestion', 'hard')">Verstopfung</button>
+                </div>
+            </div>
+            
+            <div class="question">
+                <div class="question-text">Energielevel jetzt? (1-10)</div>
+                <div class="scale-input">
+                    <button class="scale-btn" onclick="setTcm('energy', 1)">1-2</button>
+                    <button class="scale-btn" onclick="setTcm('energy', 5)">3-6</button>
+                    <button class="scale-btn" onclick="setTcm('energy', 8)">7-10</button>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="btn-calculate" onclick="calculateDiagnosis()" disabled>Diagnose Berechnen</button>
+        </div>
+        
+        <!-- SCREEN 5: DIAGNOSIS -->
+        <div class="screen" id="screen-diagnosis">
+            <h2 id="diagnosis-title"></h2>
+            
+            <div class="diagnosis-box">
+                <div class="diagnosis-section">
+                    <div class="diagnosis-label">Was Gerade Mit Dir Passiert</div>
+                    <div class="diagnosis-text" id="diagnosis-pattern"></div>
+                </div>
+                
+                <div class="diagnosis-section">
+                    <div class="diagnosis-label">Die Neurowissenschaft</div>
+                    <div class="diagnosis-text" id="diagnosis-neuro"></div>
+                </div>
+                
+                <div class="diagnosis-section">
+                    <div class="diagnosis-label">Dein Pattern (TCM)</div>
+                    <div class="diagnosis-text" id="diagnosis-tcm"></div>
+                </div>
+                
+                <div class="diagnosis-section">
+                    <div class="diagnosis-label">Dein Reset – Nächste 24 Stunden</div>
+                    <div id="practices-container"></div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="nextScreen('paywall')">Nächster Schritt</button>
+        </div>
+        
+        <!-- SCREEN 6: PAYWALL -->
+        <div class="screen" id="screen-paywall">
+            <h1>Tägliches Training</h1>
+            <p class="subtitle">
+                Deine Diagnose ist fertig. Jetzt trainierst Du jeden Tag mit Praktiken, die SPEZIELL FÜR DICH 
+                gemacht sind – nicht generisch.
+            </p>
+            
+            <div class="paywall-box">
+                <p style="color: var(--sub); margin-bottom: 20px;">Erste 7 Tage kostenlos</p>
+                <div class="paywall-price">€4,99</div>
+                <div class="paywall-period">pro Monat danach (jederzeit kündbar)</div>
+                
+                <button class="btn btn-primary" onclick="completePurchase()" style="background: linear-gradient(135deg, #4CAF50, #66BB6A); box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);">
+                    7 Tage Kostenlos Starten
+                </button>
+                
+                <button class="btn btn-secondary" onclick="skipPaywall()">Später entscheiden</button>
+                
+                <div class="paywall-benefits">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">✓</span>
+                        <span>Täglich neue Praktiken (angepasst an DEIN Pattern)</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">✓</span>
+                        <span>Tracking: "Welche Übungen helfen mir wirklich?"</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">✓</span>
+                        <span>Wöchentliche Fortschrittsberichte</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">✓</span>
+                        <span>Keine Werbung, keine Manipulation</span>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <!-- UNLOCK / PAYWALL -->
-        <div id="paywall" class="paywall">
-            <h3>Continue Your Daily Resilience</h3>
-            <p>Unlock daily coaching, TCM practices & pattern detection.</p>
-            <p style="font-size: 1.4rem; font-weight: 800; color: var(--accent); margin: 15px 0;">€4,99/month</p>
-            <p class="small">7 days free. Cancel anytime.</p>
-            <button class="btn btn-primary" onclick="app.unlockDaily()" style="margin-top: 15px;">Start Daily Practice</button>
-        </div>
-        
-        <!-- DAILY SYSTEM -->
-        <div id="daily" class="card daily">
-            <div class="streak-counter">
-                <h3 style="margin: 0;">Daily Reset</h3>
-                <div>
-                    <span style="color: var(--sub); font-size: 0.9rem;">🔥 Streak</span><br>
-                    <span class="streak-value" id="streakValue">1</span>
+        <!-- SCREEN 7: SUCCESS -->
+        <div class="screen" id="screen-success">
+            <h1>✓ Willkommen</h1>
+            <p class="subtitle">Dein 7-Tage-Training startet jetzt. Öffne die App morgen für Tag 1.</p>
+            
+            <div class="diagnosis-box">
+                <div class="diagnosis-section">
+                    <div class="diagnosis-label">Deine Zusammenfassung</div>
+                    <div class="summary-stat">
+                        <span class="stat-label">Dein Pattern:</span>
+                        <span class="stat-value" id="summary-pattern"></span>
+                    </div>
+                    <div class="summary-stat">
+                        <span class="stat-label">Belastete Bereiche:</span>
+                        <span class="stat-value" id="summary-areas"></span>
+                    </div>
                 </div>
             </div>
             
-            <p class="small">How stable are you right now?</p>
-            <div class="slider-label">
-                <span>Destabilized</span>
-                <span>In Control</span>
-            </div>
-            <input type="range" id="stabilitySlider" min="1" max="10" value="5" class="slider">
-            
-            <div id="dailyDisplay" style="text-align: center; margin: 20px 0;">
-                <span style="font-size: 2.5rem; font-weight: 800; color: var(--accent);" id="stabilityDisplay">5</span>
-                <p class="small">Current stability level</p>
+            <div class="callout">
+                <strong>Nächster Schritt:</strong> Öffne morgen die App und mach Tag 1 (15 Minuten). 
+                Danach weißt Du: Funktioniert das für mich oder nicht.
             </div>
             
-            <button class="btn btn-primary" onclick="app.getDailyGuidance()">Get Today's Directive</button>
-            
-            <div id="dailyResult" class="result"></div>
-            
-            <div id="exerciseSection" style="display: none;">
-                <div class="section">
-                    <span class="label">Recommended Practice</span>
-                </div>
-                <div id="exercisesBox"></div>
-            </div>
-            
-            <div id="history" class="history" style="display: none;">
-                <div class="label">Your Stability Pattern</div>
-                <div id="historyContent"></div>
-            </div>
+            <p style="color: var(--sub); margin-top: 30px; text-align: center; font-size: 0.89rem;">
+                💬 Fragen? support@getenerygyback.de
+            </p>
         </div>
-        
-        <div id="error-container"></div>
     </div>
 
     <script>
-        // ===== STORAGE HELPER =====
-        const StorageHelper = {
-            isAvailable: function() {
-                try {
-                    const test = '__storage_test__';
-                    localStorage.setItem(test, test);
-                    localStorage.removeItem(test);
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            },
-            
-            getItem: function(key, defaultValue = null) {
-                try {
-                    const item = localStorage.getItem(key);
-                    return item ? JSON.parse(item) : defaultValue;
-                } catch (e) {
-                    console.error(`Failed to parse localStorage item "${key}":`, e);
-                    return defaultValue;
-                }
-            },
-            
-            setItem: function(key, value) {
-                try {
-                    localStorage.setItem(key, JSON.stringify(value));
-                    return true;
-                } catch (e) {
-                    if (e.name === 'QuotaExceededError') {
-                        this.showError('Storage is full. Please clear some data.');
-                    } else {
-                        this.showError('Failed to save data. Please try again.');
-                    }
-                    console.error(`Failed to set localStorage item "${key}":`, e);
-                    return false;
-                }
-            },
-            
-            showError: function(msg) {
-                const container = document.getElementById('error-container');
-                if (container) {
-                    container.innerHTML = `<div class="error-message">${this.escapeHtml(msg)}</div>`;
-                    setTimeout(() => {
-                        container.innerHTML = '';
-                    }, 5000);
-                }
-            },
-            
-            escapeHtml: function(text) {
-                const map = {
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&#039;'
-                };
-                return text.replace(/[&<>"']/g, m => map[m]);
-            }
-        };
-
-        // ===== APP STATE =====
-        const app = {
-            state: null,
-            selected: null,
-            
-            elements: {
-                job: { name: '木 Holz', desc: 'Vertrauen & Durchsetzung' },
-                money: { name: '土 Erde', desc: 'Stabilität & Grenzen' },
-                overload: { name: '金 Metall', desc: 'Struktur & Klarheit' },
-                direction: { name: '水 Wasser', desc: 'Intuition & Anpassung' }
-            },
-            
-            exercises: {
-                job: [
-                    { title: 'Grounding: "I Can Control This"', time: '3 min', desc: 'Stabilisiere Dein Nervensystem' },
-                    { title: 'Breathing: 4-7-8 Rhythm', time: '5 min', desc: 'Reduziere Kampf-oder-Flucht Modus' },
-                    { title: 'Daily Boundary Setting', time: '2 min', desc: 'Definiere eine konkrete Aktion für heute' }
-                ],
-                money: [
-                    { title: 'Constraint Exercise', time: '5 min', desc: 'Definiere Deine feste wöchentliche Grenze' },
-                    { title: 'Stability Anchoring', time: '3 min', desc: 'Verbinde Dich mit Deinem Fundament' },
-                    { title: 'Resource Review', time: '4 min', desc: 'Was hast Du, das Du brauchst?' }
-                ],
-                overload: [
-                    { title: 'Information Detox', time: '2h block', desc: 'Keine News, keine Social Media, keine Input' },
-                    { title: 'Signal vs. Noise Exercise', time: '5 min', desc: 'Was ist wirklich wichtig heute?' },
-                    { title: 'Focus Lock-In', time: '25 min', desc: 'Pomodoro: Eine Aufgabe, kein Wechsel' }
-                ],
-                direction: [
-                    { title: '7-Day Horizon Rule', time: '5 min', desc: 'Beschränke Planung auf nächste 7 Tage' },
-                    { title: 'Action Clarity Practice', time: '10 min', desc: 'Was ist die EINE konkrete Aktion heute?' },
-                    { title: 'Uncertainty Acceptance', time: '3 min', desc: 'Meditieren: Ich muss nicht alles wissen' }
-                ]
-            },
-            
-            diagnoses: {
-                job: {
-                    diag: 'Du verlierst nicht Deinen Job. Du verlierst das Gefühl der Kontrolle.',
-                    tcm: 'Nach TCM: Dein Holz-Element (Leber) ist blockiert. Blockade entsteht durch unterdrückte Wut über Ohnmacht. Das Nervensystem ist im Kampf-oder-Flucht-Modus.',
-                    action: 'Nächste 24h: Entferne alle Job-Nachrichten. Mache EINE konkrete Aktion (CV Update OR Eine Person kontaktieren). Nichts mehr. Das gibt Deinem Gehirn die Kontrolle zurück.'
-                },
-                money: {
-                    diag: 'Das ist nicht ein Ressourcen-Problem. Das ist ein Vorhersagbarkeitsproblem.',
-                    tcm: 'Nach TCM: Dein Erde-Element (Magen/Milz) kann sich ohne Grenzen nicht stabilisieren. Finanzielle Ungewissheit erzeugt kontinuierliche mentale Last.',
-                    action: 'Nächste 24h: Definiere eine feste wöchentliche Ausgabegrenze HEUTE. Nicht optimieren. Constraint reduziert Angst schneller als Genauigkeit.'
-                },
-                overload: {
-                    diag: 'Du bist nicht müde. Du bist kognitiv gesättigt.',
-                    tcm: 'Nach TCM: Dein Metall-Element (Lunge) kann Rauschen von Signal nicht unterscheiden. Zu viel Input blockiert Priorisierung.',
-                    action: 'Nächste 24h: Schaffe einen 2h täglich "No-Input"-Block (keine News, keine Social, kein Content). Erwarte merkliche Klarheit in 72h.'
-                },
-                direction: {
-                    diag: 'Du bist überwältigt von Zukunftsungewissheit, nicht von gegenwärtigen Problemen.',
-                    tcm: 'Nach TCM: Dein Wasser-Element (Niere) versucht, langfristige Mehrdeutigkeit ohne Daten zu lösen. Das erzeugt Lähmung.',
-                    action: 'Nächste 24h: Begrenzen Sie alle Überlegungen auf einen 7-Tage-Horizont. Alles darüber hinaus wird aufgeschoben. Das stellt Ausführungskapazität wieder her.'
-                }
-            },
-            
-            init: function() {
-                if (!StorageHelper.isAvailable()) {
-                    StorageHelper.showError('localStorage is not available. Some features may not work.');
-                }
-                
-                this.loadState();
-                this.setupListeners();
-                this.renderInitialState();
-            },
-            
-            loadState: function() {
-                const defaultState = {
-                    day: 1,
-                    selectedType: null,
-                    history: [],
-                    unlocked: false,
-                    createdAt: new Date().toISOString()
-                };
-                
-                this.state = StorageHelper.getItem('geb_state', defaultState);
-                
-                // Validate state structure
-                if (!Array.isArray(this.state.history)) {
-                    this.state.history = [];
-                }
-                if (typeof this.state.day !== 'number' || this.state.day < 1) {
-                    this.state.day = 1;
-                }
-            },
-            
-            saveState: function() {
-                StorageHelper.setItem('geb_state', this.state);
-            },
-            
-            setupListeners: function() {
-                const slider = document.getElementById('stabilitySlider');
-                if (slider) {
-                    slider.addEventListener('input', (e) => {
-                        const display = document.getElementById('stabilityDisplay');
-                        if (display) {
-                            display.textContent = e.target.value;
-                        }
-                    });
-                }
-            },
-            
-            renderInitialState: function() {
-                if (this.state.unlocked) {
-                    document.getElementById('hero').classList.add('hidden');
-                    document.getElementById('quiz').classList.add('hidden');
-                    document.getElementById('result').classList.add('hidden');
-                    document.getElementById('paywall').classList.add('hidden');
-                    document.getElementById('daily').classList.add('show');
-                    this.renderDaily();
-                }
-            },
-            
-            startQuiz: function() {
-                document.getElementById('hero').classList.add('hidden');
-                document.getElementById('quiz').classList.remove('hidden');
-            },
-            
-            selectOption: function(el, type) {
-                document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-                el.classList.add('selected');
-                this.selected = type;
-            },
-            
-            analyzeSelection: function() {
-                if (!this.selected) {
-                    alert('Bitte wähle eine Option');
-                    return;
-                }
-                
-                this.state.selectedType = this.selected;
-                this.saveState();
-                
-                const data = this.diagnoses[this.selected];
-                document.getElementById('diagnosis').textContent = data.diag;
-                document.getElementById('tcmExplanation').textContent = data.tcm;
-                document.getElementById('elementBadge').textContent = this.elements[this.selected].name;
-                document.getElementById('action').textContent = data.action;
-                document.getElementById('socialProof').style.display = 'block';
-                
-                document.getElementById('quiz').classList.add('hidden');
-                document.getElementById('result').classList.remove('hidden');
-                document.getElementById('result').classList.add('show');
-                
-                setTimeout(() => {
-                    document.getElementById('paywall').classList.remove('hidden');
-                    document.getElementById('paywall').classList.add('show');
-                }, 2500);
-            },
-            
-            unlockDaily: function() {
-                this.state.unlocked = true;
-                this.state.day = 1;
-                this.state.history = [];
-                this.saveState();
-                
-                document.getElementById('paywall').classList.add('hidden');
-                document.getElementById('result').classList.add('hidden');
-                document.getElementById('quiz').classList.add('hidden');
-                document.getElementById('hero').classList.add('hidden');
-                document.getElementById('daily').classList.add('show');
-                
-                this.renderDaily();
-            },
-            
-            getDailyGuidance: function() {
-                const sliderEl = document.getElementById('stabilitySlider');
-                const stability = parseInt(sliderEl ? sliderEl.value : '5', 10);
-                
-                this.state.history.push(stability);
-                this.state.day++;
-                this.saveState();
-                
-                let directive = '';
-                if (stability <= 3) {
-                    directive = 'Du operierst unter Deinem stabilen Schwellenwert. Dein kognitives System ist erschöpft. Reduziere ALLE nicht-wesentlichen Entscheidungen. Nur Routine. Verschiebe alles Neue.';
-                } else if (stability <= 6) {
-                    directive = 'Du bist funktionsfähig aber anfällig. Führe bestehende Aufgaben aus. Keine neuen Informationen oder Kontextwechsel heute.';
-                } else {
-                    directive = 'Du hast ein hohes Kontroll-Fenster. Nutze es für EINE strategische Entscheidung. Verschwende es nicht auf Low-Value Tasks.';
-                }
-                
-                if (this.state.history.length >= 3) {
-                    directive += '\n\nMuster erkannt: Deine Schwankungen zeigen fehlende Struktur. Du brauchst ein fixes wöchentliches System.';
-                }
-                
-                const resultBox = document.getElementById('dailyResult');
-                if (resultBox) {
-                    resultBox.innerHTML = `
-                        <div class="section">
-                            <span class="label">Deine Direktive für Heute</span>
-                            <div class="value">${StorageHelper.escapeHtml(directive)}</div>
-                        </div>
-                    `;
-                    resultBox.classList.remove('hidden');
-                    resultBox.classList.add('show');
-                }
-                
-                // Show exercises
-                const exSection = document.getElementById('exerciseSection');
-                if (exSection) {
-                    exSection.style.display = 'block';
-                    const exsBox = document.getElementById('exercisesBox');
-                    if (exsBox) {
-                        const exs = this.exercises[this.state.selectedType] || this.exercises.job;
-                        exsBox.innerHTML = exs.map(ex => `
-                            <div class="exercise">
-                                <h4>${StorageHelper.escapeHtml(ex.title)}</h4>
-                                <p>${StorageHelper.escapeHtml(ex.time)} • ${StorageHelper.escapeHtml(ex.desc)}</p>
-                            </div>
-                        `).join('');
-                    }
-                }
-                
-                this.renderDaily();
-            },
-            
-            renderDaily: function() {
-                const streakEl = document.getElementById('streakValue');
-                const badgeEl = document.getElementById('navBadge');
-                
-                if (streakEl) {
-                    streakEl.textContent = this.state.day;
-                }
-                if (badgeEl) {
-                    badgeEl.textContent = `Day ${this.state.day}`;
-                }
-                
-                if (this.state.history.length > 0) {
-                    const historyEl = document.getElementById('history');
-                    if (historyEl) {
-                        historyEl.style.display = 'block';
-                        const contentEl = document.getElementById('historyContent');
-                        if (contentEl) {
-                            const recent = this.state.history.slice(-5);
-                            contentEl.innerHTML = recent.map((v, i) => {
-                                const dayNum = this.state.day - this.state.history.length + i + 1;
-                                return `<div class="history-item"><span>Tag ${dayNum}</span><span class="value">${StorageHelper.escapeHtml(String(v))}/10</span></div>`;
-                            }).join('');
-                        }
-                    }
-                }
-            }
-        };
-
-        // ===== INIT ON DOM READY =====
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                app.init();
+        let startTime = Date.now();
+        let selectedAreas = [];
+        let phqScores = {};
+        let tcmScores = {};
+        const screens = ['intro', 'areas', 'phq', 'tcm', 'diagnosis', 'paywall', 'success'];
+        
+        // TIMER
+        setInterval(() => {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const mins = Math.floor(elapsed / 60);
+            const secs = elapsed % 60;
+            document.getElementById('timer').textContent = `⏱️ ${mins}:${secs.toString().padStart(2, '0')}`;
+        }, 1000);
+        
+        function showScreen(name) {
+            screens.forEach(s => {
+                const el = document.getElementById(`screen-${s}`);
+                if (el) el.classList.remove('active');
             });
-        } else {
-            app.init();
+            const target = document.getElementById(`screen-${name}`);
+            if (target) target.classList.add('active');
+            
+            const index = screens.indexOf(name);
+            document.getElementById('progress').style.width = ((index / (screens.length - 1)) * 100) + '%';
+            window.scrollTo(0, 0);
+        }
+        
+        function startAssessment() { showScreen('areas'); }
+        
+        function validateAreas() {
+            selectedAreas = Array.from(document.querySelectorAll('#screen-areas input:checked')).map(e => e.value);
+            const errorMsg = document.getElementById('error-msg');
+            
+            if (selectedAreas.length < 2) {
+                errorMsg.innerHTML = '<div class="error-msg">Bitte wähle mindestens 2 Bereiche.</div>';
+                return;
+            }
+            errorMsg.innerHTML = '';
+            showScreen('phq');
+        }
+        
+        function setPhq(key, value) {
+            phqScores[key] = value;
+            event.target.classList.add('selected');
+            event.target.parentElement.querySelectorAll('button').forEach(b => {
+                if (b !== event.target) b.classList.remove('selected');
+            });
+            checkPhqComplete();
+        }
+        
+        function checkPhqComplete() {
+            const allSet = Object.keys(phqScores).length === 5;
+            document.getElementById('btn-next-tcm').disabled = !allSet;
+        }
+        
+        function nextScreen(name) { showScreen(name); }
+        
+        function setTcm(key, value) {
+            tcmScores[key] = value;
+            event.target.classList.add('selected');
+            event.target.parentElement.querySelectorAll('button').forEach(b => {
+                if (b !== event.target) b.classList.remove('selected');
+            });
+            checkTcmComplete();
+        }
+        
+        function checkTcmComplete() {
+            const allSet = Object.keys(tcmScores).length === 4;
+            document.getElementById('btn-calculate').disabled = !allSet;
+        }
+        
+        // DIAGNOSIS ENGINE
+        function calculateDiagnosis() {
+            const phqScore = Object.values(phqScores).reduce((a, b) => a + b, 0);
+            const energyLevel = parseInt(tcmScores.energy) || 5;
+            const sleepQuality = tcmScores.sleep;
+            
+            let diagTitle = '';
+            let diagPattern = '';
+            let diagNeuro = '';
+            let diagTcm = '';
+            let practices = [];
+            
+            // JOB SECURITY
+            if (selectedAreas.includes('job')) {
+                if (phqScore >= 12 && sleepQuality === 'poor') {
+                    diagTitle = '木 Leber-Qi blockiert';
+                    diagPattern = 'Das ist nicht rational. Es ist biologisch. Dein Körper sieht Gefahr und schaltet den Notfall-Modus ein. Das ist nicht Deine Schuld – das ist Überlebens-Instinkt.';
+                    diagNeuro = 'In Deinem Gehirn läuft das ab: Deine Angststelle (Amygdala) schreit "Gefahr!" Deine Entscheidungsstelle (Präfrontalkortex) schaltet aus. Resultat: Du denkst nicht klar. Du machst Fehler. Dein Körper ist in Kampf-oder-Flucht-Modus.';
+                    diagTcm = 'Nach TCM: Die Leber kontrolliert, wie Energie fließt. Job-Angst blockiert diesen Fluss. Das erzeugt innere Spannung. Diese Spannung wird zu Hitze: Schlaflosigkeit, Gedankenrasen, Wut.';
+                    practices = [
+                        { title: '🌬️ Box Breathing', time: '5 Min', desc: 'Einatmen 4 sec, Halten 4 sec, Ausatmen 4 sec, Halten 4 sec. 5-10x wiederholen. Das signalisiert Deinem Nervensystem: "Es ist sicher." Wirkung: Sofort.' },
+                        { title: '❄️ Kaltwasser-Schock', time: '30 sec', desc: 'Eiskaltes Wasser ins Gesicht oder Hände für 30 sec. Das triggert Deinen Tauch-Reflex und verlangsamt Herzfrequenz sofort.' },
+                        { title: '💪 Intensive Bewegung', time: '20-30 Min', desc: 'Sprinting, Krafttraining, schnell Treppenlaufen. Das verbrennt Stress-Hormone (Adrenalin, Cortisol). Danach: Dein Kopf ist klarer.' },
+                        { title: '📝 Gedanken dokumentieren', time: '10 Min', desc: 'Schreib auf: "Ich werde gefeuert." Dann: Was spricht dafür? Was dagegen? Reframe: "Es ist möglich, aber nicht sicher." Das re-engagiert Deinen Verstand.' }
+                    ];
+                } else {
+                    diagTitle = '💼 Job-Angst (moderat)';
+                    diagPattern = 'Die Angst ist da, aber nicht übergroß. Das bedeutet: Du hast noch Handlungsfähigkeit.';
+                    diagNeuro = 'Amygdala ist aktiv, aber Präfrontalkortex funktioniert noch. Du kannst strategisch handeln.';
+                    diagTcm = 'Leber-Qi ist leicht blockiert, nicht total.';
+                    practices = [
+                        { title: '🎯 Kontroll-Mapping', time: '10 Min', desc: 'Schreib zwei Listen: (1) Was kannst Du kontrollieren? (Skills, CV, Netzwerk) (2) Was nicht? (Wirtschaft, Firmenentscheidungen). Konzentriere Dich auf #1.' },
+                        { title: '🚶 Spazieren gehen', time: '30 Min', desc: 'Bewegung reguliert Nervensystem. Beim Spazieren denkst Du natürlicherweise klarer.' },
+                        { title: '💬 Ein Gespräch', time: '15 Min', desc: 'Ruf eine Vertrauensperson an. Nicht für Mitleid – für Perspektive. "Wie würdest Du denken?"' }
+                    ];
+                }
+            }
+            // MONEY STRESS
+            else if (selectedAreas.includes('money')) {
+                diagTitle = '土 Erde Element (Unsicherheit)';
+                diagPattern = 'Das ist nicht ein Ressourcen-Problem. Das ist ein Kontrolle-Problem. Dein Nervensystem kann sich nicht entspannen ohne Vorhersagbarkeit.';
+                diagNeuro = 'Finanzielle Unsicherheit erzeugt kontinuierliche mentale Last. Dein Gehirn lädt "Kann ich überleben?" in den RAM und kann nicht abschalten. Die Lösung: Künstliche Vorhersagbarkeit (Grenzen).';
+                diagTcm = 'Erde Element (Vertrauen, Verdauung) ist destabilisiert. Du brauchst keine perfekten Zahlen. Du brauchst GRENZEN. Definiere einfach: Max €X pro Woche. Punkt. Fertig.';
+                practices = [
+                    { title: '📊 Budget-Grenze setzen', time: '5 Min', desc: 'Schreib auf: "Ich gebe max €[X] pro Woche aus." Das ist nicht perfekt. Das ist einfach eine GRENZE. Dein Nervensystem braucht die Grenze mehr als Perfektion.' },
+                    { title: '🌍 Erdungs-Ritual', time: '10 Min', desc: 'Barfuß auf Gras oder Erde laufen. Das aktiviert buchstäblich und psychologisch "Grounding" – ein stabiles Gefühl.' },
+                    { title: '🍲 Nährende Mahlzeiten', time: '30 Min/Tag', desc: 'Warme, einfache Mahlzeiten (Suppen, Getreide, root vegetables). Nicht Diät. Dein Gehirn braucht das Gefühl "Ich bin versorgt."' }
+                ];
+            }
+            // MULTIPLE STRESSORS
+            else {
+                diagTitle = '⚖️ Mehrfach-Belastung';
+                diagPattern = 'Du jonglierst nicht eine Krise – mehrere gleichzeitig. Das ist körperlich anstrengend.';
+                diagNeuro = 'Mit mehreren Stressoren: Amygdala ist in Dauer-Alarm. Präfrontalkortex ist chronisch überlastet.';
+                diagTcm = 'Mehrere Organs sind leicht destabilisiert. Du brauchst Struktur, nicht Perfekt-Sein.';
+                practices = [
+                    { title: '📅 Wöchentliche Struktur', time: '30 Min Setup', desc: 'Definiere: Montag = Fokus A, Mittwoch = Fokus B, Freitag = Fokus C. Das reduziert mentale Last. Dein Gehirn muss nicht ALLES gleichzeitig jonglieren.' },
+                    { title: '🔄 Tägliches Review', time: '5 Min', desc: 'Was funktionierte heute? Was nicht? Morgen: Nur das, was funktioniert. Das ist nicht Perfektionismus – das ist Lernen.' },
+                    { title: '🚨 Priorität neu bewerten', time: 'Wöchentlich', desc: 'Was ist WIRKLICH dringend diese Woche? Alles andere wartet. Dein Gehirn braucht Klarheit über "Muss jetzt" vs. "Kann warten".' }
+                ];
+            }
+            
+            // DISPLAY
+            document.getElementById('diagnosis-title').textContent = diagTitle;
+            document.getElementById('diagnosis-pattern').textContent = diagPattern;
+            document.getElementById('diagnosis-neuro').textContent = diagNeuro;
+            document.getElementById('diagnosis-tcm').textContent = diagTcm;
+            
+            const practicesHtml = practices.map(p => `
+                <div class="practice-box">
+                    <div class="practice-title">${p.title}</div>
+                    <div class="practice-time">⏱️ ${p.time}</div>
+                    <div class="practice-desc">${p.desc}</div>
+                </div>
+            `).join('');
+            document.getElementById('practices-container').innerHTML = practicesHtml;
+            
+            // SAVE
+            const data = {
+                areas: selectedAreas.join(', '),
+                phqScore: phqScore,
+                pattern: diagTitle,
+                timestamp: new Date().toISOString(),
+                time: Math.floor((Date.now() - startTime) / 1000)
+            };
+            localStorage.setItem('assessment', JSON.stringify(data));
+            
+            showScreen('diagnosis');
+        }
+        
+        function completePurchase() {
+            const data = JSON.parse(localStorage.getItem('assessment'));
+            data.purchased = true;
+            localStorage.setItem('assessment', JSON.stringify(data));
+            
+            const areaLabels = {
+                'job': 'Jobsicherheit',
+                'money': 'Finanzen',
+                'health': 'Schlaf & Energie',
+                'relationship': 'Beziehungen',
+                'news': 'News & Welt',
+                'future': 'Zukunft'
+            };
+            
+            const selectedLabels = selectedAreas.map(a => areaLabels[a]).join(', ');
+            document.getElementById('summary-areas').textContent = selectedLabels;
+            document.getElementById('summary-pattern').textContent = document.getElementById('diagnosis-title').textContent;
+            
+            showScreen('success');
+        }
+        
+        function skipPaywall() {
+            completePurchase();
         }
     </script>
 </body>
