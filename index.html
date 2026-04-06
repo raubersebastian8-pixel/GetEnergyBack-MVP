@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Resilience coaching for uncertain times. AI-powered assessment and daily guidance.">
+    <title>GetEnergyBack - Resilience in Uncertain Times</title>
+    <style>
+        :root {
+            --primary: #1F3A5F;
+            --accent: #E3B23C;
+            --bg: #0B0F14;
+            --card: #121821;
+            --text: #E8EEF5;
+            --sub: #9AA6B2;
+            --line: #2A3440;
+            --success: #4CAF50;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui;
+        }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* NAV */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 10px;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-badge {
+            font-size: 0.8rem;
+            color: var(--sub);
+            padding: 4px 12px;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+        }
+        
+        /* TYPOGRAPHY */
+        h1 {
+            font-size: 2rem;
+            line-height: 1.25;
+            margin-bottom: 10px;
+            color: #FFFFFF;
+        }
+        
+        h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        p {
+            line-height: 1.6;
+        }
+        
+        .small {
+            font-size: 0.9rem;
+            color: var(--sub);
+        }
+        
+        /* BUTTONS */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #FFD700);
+            color: #000;
+            box-shadow: 0 4px 12px rgba(227, 178, 60, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(227, 178, 60, 0.4);
+        }
+        
+        /* CARDS */
+        .card {
+            background: var(--card);
+            padding: 24px;
+            border-radius: 16px;
+            margin-top: 20px;
+            border: 1px solid var(--line);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            border-color: var(--accent);
+            background: rgba(18, 24, 33, 0.8);
+        }
+        
+        /* OPTIONS */
+        .option {
+            border: 1.5px solid var(--line);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .option:hover {
+            border-color: var(--accent);
+            background: rgba(227, 178, 60, 0.05);
+        }
+        
+        .option.selected {
+            border-color: var(--accent);
+            background: rgba(227, 178, 60, 0.1);
+            color: var(--accent);
+        }
+        
+        /* SECTION */
+        .section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--line);
+        }
+        
+        .label {
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .value {
+            font-weight: 700;
+            color: #FFFFFF;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        /* RESULT BOX */
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 24px;
+            border-radius: 16px;
+            background: rgba(227, 178, 60, 0.05);
+            border: 1px solid rgba(227, 178, 60, 0.2);
+        }
+        
+        .result.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result h4 {
+            color: var(--accent);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        
+        /* ELEMENT BADGE */
+        .element-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(227, 178, 60, 0.15);
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        /* SOCIAL PROOF */
+        .social-proof {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 10px;
+            font-size: 0.85rem;
+        }
+        
+        .social-proof strong {
+            color: var(--success);
+        }
+        
+        /* PAYWALL */
+        .paywall {
+            display: none;
+            margin-top: 20px;
+            padding: 24px;
+            border-radius: 16px;
+            background: rgba(227, 178, 60, 0.08);
+            border: 2px solid var(--accent);
+            text-align: center;
+        }
+        
+        .paywall.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .paywall h3 {
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        
+        /* DAILY SYSTEM */
+        .daily {
+            display: none;
+        }
+        
+        .daily.show {
+            display: block;
+        }
+        
+        .streak-counter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: rgba(227, 178, 60, 0.1);
+            border-radius: 10px;
+        }
+        
+        .streak-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+        
+        /* SLIDER */
+        .slider {
+            width: 100%;
+            margin-top: 15px;
+            height: 8px;
+            border-radius: 8px;
+            background: linear-gradient(to right, #4B5EFC, var(--accent), #FFD700);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(227, 178, 60, 0.4);
+            border: 2px solid var(--accent);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            cursor: pointer;
+            border: 2px solid var(--accent);
+            box-shadow: 0 2px 8px rgba(227, 178, 60, 0.4);
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--sub);
+            margin-bottom: 8px;
+        }
+        
+        /* HISTORY */
+        .history {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: var(--sub);
+        }
+        
+        .history-item {
+            margin-top: 6px;
+            padding: 6px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .history-item .value {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        /* EXERCISES */
+        .exercise {
+            background: rgba(227, 178, 60, 0.05);
+            border: 1px solid var(--line);
+            padding: 16px;
+            border-radius: 10px;
+            margin-top: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .exercise:hover {
+            border-color: var(--accent);
+            background: rgba(227, 178, 60, 0.1);
+        }
+        
+        .exercise h4 {
+            color: var(--accent);
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+        
+        .exercise p {
+            font-size: 0.85rem;
+            color: var(--sub);
+        }
+        
+        /* VISIBILITY */
+        .hidden {
+            display: none;
+        }
+        
+        .visible {
+            display: block;
+        }
+        
+        .error-message {
+            background: rgba(255, 100, 100, 0.1);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            color: #FF6464;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6rem; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- NAV -->
+        <nav id="nav" class="visible">
+            <div class="logo">⚡ GetEnergyBack</div>
+            <div class="nav-badge" id="navBadge">Day 1</div>
+        </nav>
+        
+        <!-- HERO SECTION -->
+        <div id="hero" class="visible">
+            <h1>Stay Sharp When Everything's Uncertain</h1>
+            <p class="small">Resilience coaching based on your real situation. Take a 90-second assessment.</p>
+            <button class="btn btn-primary" onclick="app.startQuiz()">Start Assessment</button>
+        </div>
+        
+        <!-- QUIZ SECTION -->
+        <div id="quiz" class="card hidden">
+            <h3>What's destabilizing you right now?</h3>
+            <div class="option" onclick="app.selectOption(this, 'job')">
+                <strong>Job Security</strong><br>
+                <span style="font-size: 0.85rem; color: var(--sub);">Fear of losing position or being displaced by AI</span>
+            </div>
+            <div class="option" onclick="app.selectOption(this, 'money')">
+                <strong>Financial Pressure</strong><br>
+                <span style="font-size: 0.85rem; color: var(--sub);">Inflation, rising costs, financial uncertainty</span>
+            </div>
+            <div class="option" onclick="app.selectOption(this, 'overload')">
+                <strong>Information Overload</strong><br>
+                <span style="font-size: 0.85rem; color: var(--sub);">News, work chaos, too many inputs</span>
+            </div>
+            <div class="option" onclick="app.selectOption(this, 'direction')">
+                <strong>Future Uncertainty</strong><br>
+                <span style="font-size: 0.85rem; color: var(--sub);">Unclear next steps, career confusion</span>
+            </div>
+            <button class="btn btn-primary" style="margin-top: 20px;" onclick="app.analyzeSelection()">Analyze Your Situation</button>
+        </div>
+        
+        <!-- DIAGNOSIS RESULT -->
+        <div id="result" class="result">
+            <h4>Your Situation</h4>
+            <div class="section">
+                <span class="label">Diagnosis</span>
+                <div class="value" id="diagnosis"></div>
+            </div>
+            
+            <div class="section">
+                <span class="label">What's Actually Happening (TCM)</span>
+                <div class="value" id="tcmExplanation"></div>
+                <span class="element-badge" id="elementBadge"></span>
+            </div>
+            
+            <div class="section">
+                <span class="label">Your Immediate Reset (Next 24h)</span>
+                <div class="value" id="action"></div>
+            </div>
+            
+            <div id="socialProof" style="display: none;">
+                <div class="social-proof">
+                    ✓ <strong>7,843 professionals</strong> have used this assessment this week
+                </div>
+            </div>
+        </div>
+        
+        <!-- UNLOCK / PAYWALL -->
+        <div id="paywall" class="paywall">
+            <h3>Continue Your Daily Resilience</h3>
+            <p>Unlock daily coaching, TCM practices & pattern detection.</p>
+            <p style="font-size: 1.4rem; font-weight: 800; color: var(--accent); margin: 15px 0;">€4,99/month</p>
+            <p class="small">7 days free. Cancel anytime.</p>
+            <button class="btn btn-primary" onclick="app.unlockDaily()" style="margin-top: 15px;">Start Daily Practice</button>
+        </div>
+        
+        <!-- DAILY SYSTEM -->
+        <div id="daily" class="card daily">
+            <div class="streak-counter">
+                <h3 style="margin: 0;">Daily Reset</h3>
+                <div>
+                    <span style="color: var(--sub); font-size: 0.9rem;">🔥 Streak</span><br>
+                    <span class="streak-value" id="streakValue">1</span>
+                </div>
+            </div>
+            
+            <p class="small">How stable are you right now?</p>
+            <div class="slider-label">
+                <span>Destabilized</span>
+                <span>In Control</span>
+            </div>
+            <input type="range" id="stabilitySlider" min="1" max="10" value="5" class="slider">
+            
+            <div id="dailyDisplay" style="text-align: center; margin: 20px 0;">
+                <span style="font-size: 2.5rem; font-weight: 800; color: var(--accent);" id="stabilityDisplay">5</span>
+                <p class="small">Current stability level</p>
+            </div>
+            
+            <button class="btn btn-primary" onclick="app.getDailyGuidance()">Get Today's Directive</button>
+            
+            <div id="dailyResult" class="result"></div>
+            
+            <div id="exerciseSection" style="display: none;">
+                <div class="section">
+                    <span class="label">Recommended Practice</span>
+                </div>
+                <div id="exercisesBox"></div>
+            </div>
+            
+            <div id="history" class="history" style="display: none;">
+                <div class="label">Your Stability Pattern</div>
+                <div id="historyContent"></div>
+            </div>
+        </div>
+        
+        <div id="error-container"></div>
+    </div>
+
+    <script>
+        // ===== STORAGE HELPER =====
+        const StorageHelper = {
+            isAvailable: function() {
+                try {
+                    const test = '__storage_test__';
+                    localStorage.setItem(test, test);
+                    localStorage.removeItem(test);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+            
+            getItem: function(key, defaultValue = null) {
+                try {
+                    const item = localStorage.getItem(key);
+                    return item ? JSON.parse(item) : defaultValue;
+                } catch (e) {
+                    console.error(`Failed to parse localStorage item "${key}":`, e);
+                    return defaultValue;
+                }
+            },
+            
+            setItem: function(key, value) {
+                try {
+                    localStorage.setItem(key, JSON.stringify(value));
+                    return true;
+                } catch (e) {
+                    if (e.name === 'QuotaExceededError') {
+                        this.showError('Storage is full. Please clear some data.');
+                    } else {
+                        this.showError('Failed to save data. Please try again.');
+                    }
+                    console.error(`Failed to set localStorage item "${key}":`, e);
+                    return false;
+                }
+            },
+            
+            showError: function(msg) {
+                const container = document.getElementById('error-container');
+                if (container) {
+                    container.innerHTML = `<div class="error-message">${this.escapeHtml(msg)}</div>`;
+                    setTimeout(() => {
+                        container.innerHTML = '';
+                    }, 5000);
+                }
+            },
+            
+            escapeHtml: function(text) {
+                const map = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                };
+                return text.replace(/[&<>"']/g, m => map[m]);
+            }
+        };
+
+        // ===== APP STATE =====
+        const app = {
+            state: null,
+            selected: null,
+            
+            elements: {
+                job: { name: '木 Holz', desc: 'Vertrauen & Durchsetzung' },
+                money: { name: '土 Erde', desc: 'Stabilität & Grenzen' },
+                overload: { name: '金 Metall', desc: 'Struktur & Klarheit' },
+                direction: { name: '水 Wasser', desc: 'Intuition & Anpassung' }
+            },
+            
+            exercises: {
+                job: [
+                    { title: 'Grounding: "I Can Control This"', time: '3 min', desc: 'Stabilisiere Dein Nervensystem' },
+                    { title: 'Breathing: 4-7-8 Rhythm', time: '5 min', desc: 'Reduziere Kampf-oder-Flucht Modus' },
+                    { title: 'Daily Boundary Setting', time: '2 min', desc: 'Definiere eine konkrete Aktion für heute' }
+                ],
+                money: [
+                    { title: 'Constraint Exercise', time: '5 min', desc: 'Definiere Deine feste wöchentliche Grenze' },
+                    { title: 'Stability Anchoring', time: '3 min', desc: 'Verbinde Dich mit Deinem Fundament' },
+                    { title: 'Resource Review', time: '4 min', desc: 'Was hast Du, das Du brauchst?' }
+                ],
+                overload: [
+                    { title: 'Information Detox', time: '2h block', desc: 'Keine News, keine Social Media, keine Input' },
+                    { title: 'Signal vs. Noise Exercise', time: '5 min', desc: 'Was ist wirklich wichtig heute?' },
+                    { title: 'Focus Lock-In', time: '25 min', desc: 'Pomodoro: Eine Aufgabe, kein Wechsel' }
+                ],
+                direction: [
+                    { title: '7-Day Horizon Rule', time: '5 min', desc: 'Beschränke Planung auf nächste 7 Tage' },
+                    { title: 'Action Clarity Practice', time: '10 min', desc: 'Was ist die EINE konkrete Aktion heute?' },
+                    { title: 'Uncertainty Acceptance', time: '3 min', desc: 'Meditieren: Ich muss nicht alles wissen' }
+                ]
+            },
+            
+            diagnoses: {
+                job: {
+                    diag: 'Du verlierst nicht Deinen Job. Du verlierst das Gefühl der Kontrolle.',
+                    tcm: 'Nach TCM: Dein Holz-Element (Leber) ist blockiert. Blockade entsteht durch unterdrückte Wut über Ohnmacht. Das Nervensystem ist im Kampf-oder-Flucht-Modus.',
+                    action: 'Nächste 24h: Entferne alle Job-Nachrichten. Mache EINE konkrete Aktion (CV Update OR Eine Person kontaktieren). Nichts mehr. Das gibt Deinem Gehirn die Kontrolle zurück.'
+                },
+                money: {
+                    diag: 'Das ist nicht ein Ressourcen-Problem. Das ist ein Vorhersagbarkeitsproblem.',
+                    tcm: 'Nach TCM: Dein Erde-Element (Magen/Milz) kann sich ohne Grenzen nicht stabilisieren. Finanzielle Ungewissheit erzeugt kontinuierliche mentale Last.',
+                    action: 'Nächste 24h: Definiere eine feste wöchentliche Ausgabegrenze HEUTE. Nicht optimieren. Constraint reduziert Angst schneller als Genauigkeit.'
+                },
+                overload: {
+                    diag: 'Du bist nicht müde. Du bist kognitiv gesättigt.',
+                    tcm: 'Nach TCM: Dein Metall-Element (Lunge) kann Rauschen von Signal nicht unterscheiden. Zu viel Input blockiert Priorisierung.',
+                    action: 'Nächste 24h: Schaffe einen 2h täglich "No-Input"-Block (keine News, keine Social, kein Content). Erwarte merkliche Klarheit in 72h.'
+                },
+                direction: {
+                    diag: 'Du bist überwältigt von Zukunftsungewissheit, nicht von gegenwärtigen Problemen.',
+                    tcm: 'Nach TCM: Dein Wasser-Element (Niere) versucht, langfristige Mehrdeutigkeit ohne Daten zu lösen. Das erzeugt Lähmung.',
+                    action: 'Nächste 24h: Begrenzen Sie alle Überlegungen auf einen 7-Tage-Horizont. Alles darüber hinaus wird aufgeschoben. Das stellt Ausführungskapazität wieder her.'
+                }
+            },
+            
+            init: function() {
+                if (!StorageHelper.isAvailable()) {
+                    StorageHelper.showError('localStorage is not available. Some features may not work.');
+                }
+                
+                this.loadState();
+                this.setupListeners();
+                this.renderInitialState();
+            },
+            
+            loadState: function() {
+                const defaultState = {
+                    day: 1,
+                    selectedType: null,
+                    history: [],
+                    unlocked: false,
+                    createdAt: new Date().toISOString()
+                };
+                
+                this.state = StorageHelper.getItem('geb_state', defaultState);
+                
+                // Validate state structure
+                if (!Array.isArray(this.state.history)) {
+                    this.state.history = [];
+                }
+                if (typeof this.state.day !== 'number' || this.state.day < 1) {
+                    this.state.day = 1;
+                }
+            },
+            
+            saveState: function() {
+                StorageHelper.setItem('geb_state', this.state);
+            },
+            
+            setupListeners: function() {
+                const slider = document.getElementById('stabilitySlider');
+                if (slider) {
+                    slider.addEventListener('input', (e) => {
+                        const display = document.getElementById('stabilityDisplay');
+                        if (display) {
+                            display.textContent = e.target.value;
+                        }
+                    });
+                }
+            },
+            
+            renderInitialState: function() {
+                if (this.state.unlocked) {
+                    document.getElementById('hero').classList.add('hidden');
+                    document.getElementById('quiz').classList.add('hidden');
+                    document.getElementById('result').classList.add('hidden');
+                    document.getElementById('paywall').classList.add('hidden');
+                    document.getElementById('daily').classList.add('show');
+                    this.renderDaily();
+                }
+            },
+            
+            startQuiz: function() {
+                document.getElementById('hero').classList.add('hidden');
+                document.getElementById('quiz').classList.remove('hidden');
+            },
+            
+            selectOption: function(el, type) {
+                document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+                el.classList.add('selected');
+                this.selected = type;
+            },
+            
+            analyzeSelection: function() {
+                if (!this.selected) {
+                    alert('Bitte wähle eine Option');
+                    return;
+                }
+                
+                this.state.selectedType = this.selected;
+                this.saveState();
+                
+                const data = this.diagnoses[this.selected];
+                document.getElementById('diagnosis').textContent = data.diag;
+                document.getElementById('tcmExplanation').textContent = data.tcm;
+                document.getElementById('elementBadge').textContent = this.elements[this.selected].name;
+                document.getElementById('action').textContent = data.action;
+                document.getElementById('socialProof').style.display = 'block';
+                
+                document.getElementById('quiz').classList.add('hidden');
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('result').classList.add('show');
+                
+                setTimeout(() => {
+                    document.getElementById('paywall').classList.remove('hidden');
+                    document.getElementById('paywall').classList.add('show');
+                }, 2500);
+            },
+            
+            unlockDaily: function() {
+                this.state.unlocked = true;
+                this.state.day = 1;
+                this.state.history = [];
+                this.saveState();
+                
+                document.getElementById('paywall').classList.add('hidden');
+                document.getElementById('result').classList.add('hidden');
+                document.getElementById('quiz').classList.add('hidden');
+                document.getElementById('hero').classList.add('hidden');
+                document.getElementById('daily').classList.add('show');
+                
+                this.renderDaily();
+            },
+            
+            getDailyGuidance: function() {
+                const sliderEl = document.getElementById('stabilitySlider');
+                const stability = parseInt(sliderEl ? sliderEl.value : '5', 10);
+                
+                this.state.history.push(stability);
+                this.state.day++;
+                this.saveState();
+                
+                let directive = '';
+                if (stability <= 3) {
+                    directive = 'Du operierst unter Deinem stabilen Schwellenwert. Dein kognitives System ist erschöpft. Reduziere ALLE nicht-wesentlichen Entscheidungen. Nur Routine. Verschiebe alles Neue.';
+                } else if (stability <= 6) {
+                    directive = 'Du bist funktionsfähig aber anfällig. Führe bestehende Aufgaben aus. Keine neuen Informationen oder Kontextwechsel heute.';
+                } else {
+                    directive = 'Du hast ein hohes Kontroll-Fenster. Nutze es für EINE strategische Entscheidung. Verschwende es nicht auf Low-Value Tasks.';
+                }
+                
+                if (this.state.history.length >= 3) {
+                    directive += '\n\nMuster erkannt: Deine Schwankungen zeigen fehlende Struktur. Du brauchst ein fixes wöchentliches System.';
+                }
+                
+                const resultBox = document.getElementById('dailyResult');
+                if (resultBox) {
+                    resultBox.innerHTML = `
+                        <div class="section">
+                            <span class="label">Deine Direktive für Heute</span>
+                            <div class="value">${StorageHelper.escapeHtml(directive)}</div>
+                        </div>
+                    `;
+                    resultBox.classList.remove('hidden');
+                    resultBox.classList.add('show');
+                }
+                
+                // Show exercises
+                const exSection = document.getElementById('exerciseSection');
+                if (exSection) {
+                    exSection.style.display = 'block';
+                    const exsBox = document.getElementById('exercisesBox');
+                    if (exsBox) {
+                        const exs = this.exercises[this.state.selectedType] || this.exercises.job;
+                        exsBox.innerHTML = exs.map(ex => `
+                            <div class="exercise">
+                                <h4>${StorageHelper.escapeHtml(ex.title)}</h4>
+                                <p>${StorageHelper.escapeHtml(ex.time)} • ${StorageHelper.escapeHtml(ex.desc)}</p>
+                            </div>
+                        `).join('');
+                    }
+                }
+                
+                this.renderDaily();
+            },
+            
+            renderDaily: function() {
+                const streakEl = document.getElementById('streakValue');
+                const badgeEl = document.getElementById('navBadge');
+                
+                if (streakEl) {
+                    streakEl.textContent = this.state.day;
+                }
+                if (badgeEl) {
+                    badgeEl.textContent = `Day ${this.state.day}`;
+                }
+                
+                if (this.state.history.length > 0) {
+                    const historyEl = document.getElementById('history');
+                    if (historyEl) {
+                        historyEl.style.display = 'block';
+                        const contentEl = document.getElementById('historyContent');
+                        if (contentEl) {
+                            const recent = this.state.history.slice(-5);
+                            contentEl.innerHTML = recent.map((v, i) => {
+                                const dayNum = this.state.day - this.state.history.length + i + 1;
+                                return `<div class="history-item"><span>Tag ${dayNum}</span><span class="value">${StorageHelper.escapeHtml(String(v))}/10</span></div>`;
+                            }).join('');
+                        }
+                    }
+                }
+            }
+        };
+
+        // ===== INIT ON DOM READY =====
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                app.init();
+            });
+        } else {
+            app.init();
+        }
+    </script>
+</body>
+</html>
