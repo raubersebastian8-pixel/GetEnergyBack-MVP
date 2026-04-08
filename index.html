@@ -1,193 +1,334 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GetEnergyBack - Resilience Coaching</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>GetEnergyBack - Resilience im Alltag</title>
     <style>
         :root {
-            --primary: #1F3A5F;
             --accent: #E3B23C;
+            --success: #4CAF50;
             --bg: #0B0F14;
             --card: #121821;
             --text: #E8EEF5;
             --sub: #9AA6B2;
             --line: #2A3440;
-            --success: #4CAF50;
+            --danger: #FF6B6B;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui;
+            -webkit-tap-highlight-color: transparent;
         }
         
-        html { scroll-behavior: smooth; }
         body {
             background: linear-gradient(135deg, var(--bg) 0%, #1a1f2e 100%);
             color: var(--text);
-            line-height: 1.65;
+            font-family: system-ui, -apple-system, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 100vw;
+            overflow-x: hidden;
         }
         
-        .container {
-            max-width: 740px;
-            margin: 0 auto;
-            padding: 20px;
+        .app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         
-        nav {
+        .top-bar {
+            background: linear-gradient(135deg, rgba(11,15,20,0.9), rgba(26,31,46,0.9));
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line);
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
         .logo {
-            font-size: 1.3rem;
             font-weight: 900;
-            letter-spacing: -0.5px;
             background: linear-gradient(135deg, var(--accent), #FFD700);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            font-size: 1.1rem;
         }
         
-        .progress-bar {
-            height: 3px;
-            background: var(--line);
-            border-radius: 10px;
-            margin-bottom: 35px;
-            overflow: hidden;
+        .streak-mini {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.88rem;
         }
         
         .progress {
+            height: 2px;
+            background: var(--line);
+        }
+        
+        .progress-bar {
             height: 100%;
             background: linear-gradient(90deg, var(--accent), #FFD700);
-            width: 0%;
             transition: width 0.4s ease;
+        }
+        
+        .screen-container {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 100px;
         }
         
         .screen {
             display: none;
-            animation: slideIn 0.4s ease;
+            min-height: 100%;
         }
         
         .screen.active {
             display: block;
+            animation: slideIn 0.3s ease;
         }
         
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(12px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
+        .content {
+            padding: 20px 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
         h1 {
-            font-size: 2rem;
-            margin-bottom: 14px;
-            color: #FFFFFF;
+            font-size: 1.9rem;
             font-weight: 900;
-            line-height: 1.2;
+            margin-bottom: 10px;
+            color: #FFF;
         }
         
         h2 {
             font-size: 1.4rem;
-            margin-bottom: 14px;
-            color: #FFFFFF;
             font-weight: 800;
+            margin-bottom: 8px;
+            color: #FFF;
         }
         
         .subtitle {
             color: var(--sub);
-            margin-bottom: 28px;
-            font-size: 0.98rem;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
             line-height: 1.6;
         }
         
-        .question {
-            margin-bottom: 26px;
+        /* TRAINING HEADER */
+        .training-header {
+            text-align: center;
+            margin-bottom: 32px;
         }
         
-        .question-text {
+        .day-badge {
+            display: inline-block;
+            background: rgba(227, 178, 60, 0.15);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
             font-weight: 700;
-            margin-bottom: 14px;
-            font-size: 0.96rem;
-            color: #FFFFFF;
+            margin-bottom: 16px;
         }
         
-        .checkbox-item {
-            display: flex;
-            gap: 14px;
-            margin-bottom: 14px;
+        .streak-display {
+            text-align: center;
+            padding: 40px 0;
         }
         
-        .checkbox-item input[type="checkbox"] {
-            margin-top: 3px;
-            cursor: pointer;
-            width: 20px;
-            height: 20px;
-            accent-color: var(--accent);
-            flex-shrink: 0;
-        }
-        
-        .checkbox-label {
-            cursor: pointer;
-            flex: 1;
-        }
-        
-        .checkbox-title {
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: #FFFFFF;
+        .streak-number {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
             margin-bottom: 4px;
         }
         
-        .checkbox-desc {
-            font-size: 0.84rem;
+        .streak-label {
             color: var(--sub);
+            font-size: 0.95rem;
+            font-weight: 600;
         }
         
-        .scale-input {
+        /* CARDS */
+        .practice-card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .card-title {
+            color: var(--accent);
+            font-weight: 800;
+            font-size: 0.98rem;
+            margin-bottom: 8px;
+        }
+        
+        .card-meta {
+            color: var(--sub);
+            font-size: 0.84rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .card-text {
+            color: var(--text);
+            font-size: 0.92rem;
+            line-height: 1.75;
+            margin-bottom: 14px;
+        }
+        
+        .expand-toggle {
+            color: var(--accent);
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .expanded {
+            display: none;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line);
+        }
+        
+        .expanded.active {
+            display: block;
+        }
+        
+        .section-header {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .section-body {
+            color: var(--text);
+            font-size: 0.90rem;
+            line-height: 1.75;
+        }
+        
+        .step-list {
+            list-style: none;
+            counter-reset: step;
+            margin-bottom: 12px;
+        }
+        
+        .step-list li {
+            counter-increment: step;
+            margin-bottom: 10px;
+            font-size: 0.90rem;
+            color: var(--text);
+            line-height: 1.6;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .step-list li:before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: rgba(227, 178, 60, 0.2);
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+        
+        /* FEEDBACK */
+        .feedback-container {
+            background: rgba(227, 178, 60, 0.08);
+            border: 1px solid rgba(227, 178, 60, 0.25);
+            padding: 16px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .feedback-label {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.88rem;
+            margin-bottom: 12px;
+        }
+        
+        .feedback-scale {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 9px;
-            margin-top: 12px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
         }
         
-        .scale-btn {
-            padding: 11px;
+        .feedback-btn {
+            padding: 10px;
             border: 1.5px solid var(--line);
             background: var(--card);
             color: var(--text);
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.83rem;
-            transition: all 0.25s ease;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
         }
         
-        .scale-btn:hover {
-            border-color: var(--accent);
-            background: rgba(227, 178, 60, 0.08);
-        }
-        
-        .scale-btn.selected {
+        .feedback-btn.selected {
             background: var(--accent);
             color: #000;
             border-color: var(--accent);
         }
         
+        .notes-input {
+            width: 100%;
+            padding: 10px;
+            background: var(--card);
+            border: 1px solid var(--line);
+            color: var(--text);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: system-ui;
+            resize: vertical;
+            min-height: 60px;
+        }
+        
+        /* BUTTONS */
         .btn {
             width: 100%;
-            padding: 13px;
+            padding: 14px;
             border: none;
             border-radius: 10px;
             font-weight: 700;
-            cursor: pointer;
             font-size: 0.98rem;
+            cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 26px;
+            margin-top: 28px;
         }
         
         .btn-primary {
@@ -196,176 +337,159 @@
             box-shadow: 0 4px 12px rgba(227, 178, 60, 0.2);
         }
         
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(227, 178, 60, 0.3);
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.98);
         }
         
         .btn-primary:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
         }
         
         .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 1.5px solid var(--line);
+        }
+        
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 0;
+            background: linear-gradient(180deg, rgba(11,15,20,0) 0%, rgba(11,15,20,0.98) 80%);
+            border-top: 1px solid var(--line);
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 10px;
+            border: none;
             background: transparent;
+            color: var(--sub);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-btn.active {
             color: var(--accent);
-            border: 1.5px solid var(--accent);
-            margin-top: 12px;
         }
         
-        .btn-secondary:hover {
-            background: rgba(227, 178, 60, 0.1);
+        .nav-icon {
+            font-size: 1.4rem;
         }
         
-        .diagnosis-box {
-            background: rgba(227, 178, 60, 0.06);
-            border: 1px solid rgba(227, 178, 60, 0.25);
-            padding: 26px;
-            border-radius: 12px;
+        /* LIBRARY */
+        .search-box {
+            background: var(--card);
+            border: 1px solid var(--line);
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--text);
+            margin-bottom: 16px;
+            font-size: 0.92rem;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+        
+        .filter-tab {
+            padding: 8px 14px;
+            border: 1.5px solid var(--line);
+            background: transparent;
+            color: var(--sub);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #000;
+        }
+        
+        .library-item {
+            background: var(--card);
+            border: 1px solid var(--line);
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        
+        .lib-title {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+        
+        .lib-meta {
+            color: var(--sub);
+            font-size: 0.82rem;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .lib-desc {
+            color: var(--text);
+            font-size: 0.88rem;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+        
+        /* PROGRESS DASHBOARD */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
             margin-bottom: 24px;
         }
         
-        .diagnosis-section {
-            margin-bottom: 26px;
-        }
-        
-        .diagnosis-section:last-child {
-            margin-bottom: 0;
-        }
-        
-        .diagnosis-label {
-            color: var(--accent);
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.73rem;
-            margin-bottom: 10px;
-            letter-spacing: 0.8px;
-        }
-        
-        .diagnosis-text {
-            color: var(--text);
-            font-size: 0.96rem;
-            line-height: 1.75;
-        }
-        
-        .practice-box {
+        .stat-card {
             background: var(--card);
             border: 1px solid var(--line);
             padding: 16px;
             border-radius: 10px;
-            margin-bottom: 12px;
-            transition: all 0.3s ease;
-        }
-        
-        .practice-box:hover {
-            border-color: var(--accent);
-            background: rgba(227, 178, 60, 0.04);
-        }
-        
-        .practice-title {
-            color: var(--accent);
-            font-weight: 800;
-            margin-bottom: 6px;
-            font-size: 0.94rem;
-        }
-        
-        .practice-time {
-            color: var(--sub);
-            font-size: 0.82rem;
-            margin-bottom: 9px;
-        }
-        
-        .practice-desc {
-            color: var(--text);
-            font-size: 0.90rem;
-            line-height: 1.65;
-        }
-        
-        .timer {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(31, 58, 95, 0.95);
-            border: 1px solid var(--line);
-            padding: 9px 13px;
-            border-radius: 8px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            color: var(--accent);
-            z-index: 1000;
-        }
-        
-        .paywall-box {
-            background: rgba(76, 175, 80, 0.08);
-            border: 1.5px solid rgba(76, 175, 80, 0.3);
-            padding: 26px;
-            border-radius: 12px;
             text-align: center;
-            margin-bottom: 24px;
         }
         
-        .paywall-price {
-            font-size: 2.2rem;
+        .stat-number {
+            font-size: 2rem;
             font-weight: 900;
             color: var(--accent);
-            margin: 18px 0 8px 0;
-        }
-        
-        .paywall-period {
-            color: var(--sub);
-            font-size: 0.88rem;
-            margin-bottom: 22px;
-        }
-        
-        .paywall-benefits {
-            text-align: left;
-            margin-top: 20px;
-            padding-top: 18px;
-            border-top: 1px solid var(--line);
-        }
-        
-        .benefit-item {
-            display: flex;
-            gap: 9px;
-            margin-bottom: 10px;
-            font-size: 0.89rem;
-        }
-        
-        .benefit-icon {
-            color: var(--success);
-            font-weight: 800;
-            flex-shrink: 0;
-        }
-        
-        .error-msg {
-            background: rgba(244, 67, 54, 0.15);
-            border: 1px solid rgba(244, 67, 54, 0.3);
-            color: #FF6B6B;
-            padding: 11px;
-            border-radius: 8px;
-            margin-bottom: 18px;
-            font-size: 0.88rem;
-        }
-        
-        .summary-stat {
-            display: flex;
-            justify-content: space-between;
-            padding: 11px 0;
-            border-bottom: 1px solid var(--line);
-            font-size: 0.93rem;
-        }
-        
-        .summary-stat:last-child {
-            border-bottom: none;
+            line-height: 1;
+            margin-bottom: 4px;
         }
         
         .stat-label {
             color: var(--sub);
+            font-size: 0.8rem;
+            font-weight: 600;
         }
         
-        .stat-value {
-            color: var(--accent);
-            font-weight: 700;
+        .checkmark {
+            color: var(--success);
         }
         
         .callout {
@@ -374,488 +498,497 @@
             padding: 14px;
             border-radius: 6px;
             margin: 20px 0;
-            font-size: 0.93rem;
+            font-size: 0.92rem;
             line-height: 1.7;
+        }
+        
+        .error {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: var(--danger);
+            padding: 11px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            font-size: 0.88rem;
         }
     </style>
 </head>
 <body>
-    <div class="timer" id="timer">⏱️ 0:00</div>
-    
-    <div class="container">
-        <nav>
+    <div class="app">
+        <div class="top-bar">
             <div class="logo">⚡ GetEnergyBack</div>
-        </nav>
-        
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
+            <div class="streak-mini">🔥 <span id="streak-mini">1</span></div>
         </div>
         
-        <!-- SCREEN 1: INTRO -->
-        <div class="screen active" id="screen-intro">
-            <h1>Deine Situation verstehen</h1>
-            <p class="subtitle">
-                Nicht "du bist ängstlich". Sondern: Was passiert gerade wirklich in deinem Körper? 
-                Und wie stoppt man das?
-            </p>
-            
-            <div class="callout">
-                <strong>Du bekommst:</strong> Eine echte Diagnose (nicht Selbsttest-Quiz). Basierend auf Neurowissenschaft 
-                und traditioneller chinesischer Medizin. Und konkrete Praktiken für die nächsten 24 Stunden.
-            </div>
-            
-            <p style="color: var(--sub); margin-top: 24px; font-size: 0.92rem;">
-                ⏱️ 9 Minuten | 🔒 Deine Daten sind privat | ✓ Kein BS
-            </p>
-            
-            <button class="btn btn-primary" onclick="startAssessment()">Starte Analyse</button>
+        <div class="progress">
+            <div class="progress-bar" id="prog"></div>
         </div>
         
-        <!-- SCREEN 2: LIFE AREAS -->
-        <div class="screen" id="screen-areas">
-            <h1>Was drückt Dich gerade?</h1>
-            <p class="subtitle">Wähle 2-3 Bereiche, die Dich JETZT beschäftigen.</p>
-            
-            <div id="error-msg"></div>
-            
-            <div class="checkbox-item">
-                <input type="checkbox" id="job" value="job">
-                <label for="job" class="checkbox-label">
-                    <div class="checkbox-title">💼 Jobsicherheit</div>
-                    <div class="checkbox-desc">Angst vor Jobverlust oder AI-Verdrängung</div>
-                </label>
-            </div>
-            
-            <div class="checkbox-item">
-                <input type="checkbox" id="money" value="money">
-                <label for="money" class="checkbox-label">
-                    <div class="checkbox-title">💰 Finanzielle Druck</div>
-                    <div class="checkbox-desc">Inflation, steigende Kosten, finanzielle Unsicherheit</div>
-                </label>
-            </div>
-            
-            <div class="checkbox-item">
-                <input type="checkbox" id="health" value="health">
-                <label for="health" class="checkbox-label">
-                    <div class="checkbox-title">😴 Schlaf & Energie</div>
-                    <div class="checkbox-desc">Schlaflosigkeit, Müdigkeit, körperliche Symptome</div>
-                </label>
-            </div>
-            
-            <div class="checkbox-item">
-                <input type="checkbox" id="relationship" value="relationship">
-                <label for="relationship" class="checkbox-label">
-                    <div class="checkbox-title">💔 Beziehungen & Familie</div>
-                    <div class="checkbox-desc">Partner-Konflikte, Familie, Einsamkeit</div>
-                </label>
-            </div>
-            
-            <div class="checkbox-item">
-                <input type="checkbox" id="news" value="news">
-                <label for="news" class="checkbox-label">
-                    <div class="checkbox-title">📰 News & Welt</div>
-                    <div class="checkbox-desc">Geopolitik, Angst um die Zukunft, ständiges News-Checken</div>
-                </label>
-            </div>
-            
-            <div class="checkbox-item">
-                <input type="checkbox" id="future" value="future">
-                <label for="future" class="checkbox-label">
-                    <div class="checkbox-title">🔮 Zukunfts-Unsicherheit</div>
-                    <div class="checkbox-desc">Karriere unklar, nächste Schritte unbekannt</div>
-                </label>
-            </div>
-            
-            <button class="btn btn-primary" onclick="validateAreas()">Weiter</button>
-        </div>
-        
-        <!-- SCREEN 3: QUICK MENTAL HEALTH CHECK -->
-        <div class="screen" id="screen-phq">
-            <h1>Deine mentale Basis</h1>
-            <p class="subtitle">5 Fragen. Ganz ehrlich antworten.</p>
-            
-            <div class="question">
-                <div class="question-text">Wie oft fühlst Du Dich niedergeschlagen oder hoffnungslos? (letzte 2 Wochen)</div>
-                <div class="scale-input">
-                    <button class="scale-btn" onclick="setPhq('sadness', 0)">Nie</button>
-                    <button class="scale-btn" onclick="setPhq('sadness', 1)">1-2 Tage</button>
-                    <button class="scale-btn" onclick="setPhq('sadness', 2)">5+ Tage</button>
-                    <button class="scale-btn" onclick="setPhq('sadness', 3)">Fast täglich</button>
+        <div class="screen-container">
+            <!-- INTRO -->
+            <div class="screen active" id="s-intro">
+                <div class="content">
+                    <h1>Resilience im Alltag</h1>
+                    <p class="subtitle">Nicht "du bist ängstlich". Sondern: Dein Pattern. Warum. Was hilft – konkret.</p>
+                    <div class="callout"><strong>Diese Assessment kennt Dich nach 15 Minuten besser als Du selbst.</strong></div>
+                    <button class="btn btn-primary" onclick="go('areas')">Los geht's</button>
                 </div>
             </div>
             
-            <div class="question">
-                <div class="question-text">Wie oft hast Du Schlafprobleme? (Ein- oder Durchschlafen)</div>
-                <div class="scale-input">
-                    <button class="scale-btn" onclick="setPhq('sleep', 0)">Nie</button>
-                    <button class="scale-btn" onclick="setPhq('sleep', 1)">1-2 Nächte</button>
-                    <button class="scale-btn" onclick="setPhq('sleep', 2)">Mehrmals</button>
-                    <button class="scale-btn" onclick="setPhq('sleep', 3)">Jede Nacht</button>
-                </div>
-            </div>
-            
-            <div class="question">
-                <div class="question-text">Wie oft fühlst Du Dich müde oder energielos?</div>
-                <div class="scale-input">
-                    <button class="scale-btn" onclick="setPhq('energy', 0)">Nie</button>
-                    <button class="scale-btn" onclick="setPhq('energy', 1)">Manchmal</button>
-                    <button class="scale-btn" onclick="setPhq('energy', 2)">Oft</button>
-                    <button class="scale-btn" onclick="setPhq('energy', 3)">Fast immer</button>
-                </div>
-            </div>
-            
-            <div class="question">
-                <div class="question-text">Wie oft fühlst Du Dich nervös, angespannt oder angespannt?</div>
-                <div class="scale-input">
-                    <button class="scale-btn" onclick="setPhq('anxiety', 0)">Nie</button>
-                    <button class="scale-btn" onclick="setPhq('anxiety', 1)">Manchmal</button>
-                    <button class="scale-btn" onclick="setPhq('anxiety', 2)">Oft</button>
-                    <button class="scale-btn" onclick="setPhq('anxiety', 3)">Ständig</button>
-                </div>
-            </div>
-            
-            <div class="question">
-                <div class="question-text">Kannst Du Deine Sorgen nicht kontrollieren oder stoppen?</div>
-                <div class="scale-input">
-                    <button class="scale-btn" onclick="setPhq('worry', 0)">Nie</button>
-                    <button class="scale-btn" onclick="setPhq('worry', 1)">Manchmal</button>
-                    <button class="scale-btn" onclick="setPhq('worry', 2)">Oft</button>
-                    <button class="scale-btn" onclick="setPhq('worry', 3)">Ja, immer</button>
-                </div>
-            </div>
-            
-            <button class="btn btn-primary" id="btn-next-tcm" onclick="nextScreen('tcm')" disabled>Weiter</button>
-        </div>
-        
-        <!-- SCREEN 4: TCM QUICK CHECK -->
-        <div class="screen" id="screen-tcm">
-            <h1>Wie funktioniert Dein Körper?</h1>
-            <p class="subtitle">Traditionelle chinesische Medizin hilft hier, Muster zu erkennen.</p>
-            
-            <div class="question">
-                <div class="question-text">Schlafqualität?</div>
-                <div class="scale-input" style="grid-template-columns: 1fr 1fr 1fr;">
-                    <button class="scale-btn" onclick="setTcm('sleep', 'poor')">Sehr schlecht</button>
-                    <button class="scale-btn" onclick="setTcm('sleep', 'ok')">Okay</button>
-                    <button class="scale-btn" onclick="setTcm('sleep', 'good')">Gut</button>
-                </div>
-            </div>
-            
-            <div class="question">
-                <div class="question-text">Magst Du eher Wärme oder Kälte?</div>
-                <div class="scale-input" style="grid-template-columns: 1fr 1fr 1fr;">
-                    <button class="scale-btn" onclick="setTcm('temp', 'cold')">Kälte</button>
-                    <button class="scale-btn" onclick="setTcm('temp', 'neutral')">Egal</button>
-                    <button class="scale-btn" onclick="setTcm('temp', 'hot')">Wärme</button>
-                </div>
-            </div>
-            
-            <div class="question">
-                <div class="question-text">Verdauung?</div>
-                <div class="scale-input" style="grid-template-columns: 1fr 1fr 1fr;">
-                    <button class="scale-btn" onclick="setTcm('digestion', 'loose')">Locker</button>
-                    <button class="scale-btn" onclick="setTcm('digestion', 'normal')">Normal</button>
-                    <button class="scale-btn" onclick="setTcm('digestion', 'hard')">Verstopfung</button>
-                </div>
-            </div>
-            
-            <div class="question">
-                <div class="question-text">Energielevel jetzt? (1-10)</div>
-                <div class="scale-input">
-                    <button class="scale-btn" onclick="setTcm('energy', 1)">1-2</button>
-                    <button class="scale-btn" onclick="setTcm('energy', 5)">3-6</button>
-                    <button class="scale-btn" onclick="setTcm('energy', 8)">7-10</button>
-                </div>
-            </div>
-            
-            <button class="btn btn-primary" id="btn-calculate" onclick="calculateDiagnosis()" disabled>Diagnose Berechnen</button>
-        </div>
-        
-        <!-- SCREEN 5: DIAGNOSIS -->
-        <div class="screen" id="screen-diagnosis">
-            <h2 id="diagnosis-title"></h2>
-            
-            <div class="diagnosis-box">
-                <div class="diagnosis-section">
-                    <div class="diagnosis-label">Was Gerade Mit Dir Passiert</div>
-                    <div class="diagnosis-text" id="diagnosis-pattern"></div>
-                </div>
-                
-                <div class="diagnosis-section">
-                    <div class="diagnosis-label">Die Neurowissenschaft</div>
-                    <div class="diagnosis-text" id="diagnosis-neuro"></div>
-                </div>
-                
-                <div class="diagnosis-section">
-                    <div class="diagnosis-label">Dein Pattern (TCM)</div>
-                    <div class="diagnosis-text" id="diagnosis-tcm"></div>
-                </div>
-                
-                <div class="diagnosis-section">
-                    <div class="diagnosis-label">Dein Reset – Nächste 24 Stunden</div>
-                    <div id="practices-container"></div>
-                </div>
-            </div>
-            
-            <button class="btn btn-primary" onclick="nextScreen('paywall')">Nächster Schritt</button>
-        </div>
-        
-        <!-- SCREEN 6: PAYWALL -->
-        <div class="screen" id="screen-paywall">
-            <h1>Tägliches Training</h1>
-            <p class="subtitle">
-                Deine Diagnose ist fertig. Jetzt trainierst Du jeden Tag mit Praktiken, die SPEZIELL FÜR DICH 
-                gemacht sind – nicht generisch.
-            </p>
-            
-            <div class="paywall-box">
-                <p style="color: var(--sub); margin-bottom: 20px;">Erste 7 Tage kostenlos</p>
-                <div class="paywall-price">€4,99</div>
-                <div class="paywall-period">pro Monat danach (jederzeit kündbar)</div>
-                
-                <button class="btn btn-primary" onclick="completePurchase()" style="background: linear-gradient(135deg, #4CAF50, #66BB6A); box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);">
-                    7 Tage Kostenlos Starten
-                </button>
-                
-                <button class="btn btn-secondary" onclick="skipPaywall()">Später entscheiden</button>
-                
-                <div class="paywall-benefits">
-                    <div class="benefit-item">
-                        <span class="benefit-icon">✓</span>
-                        <span>Täglich neue Praktiken (angepasst an DEIN Pattern)</span>
+            <!-- AREAS SCREEN -->
+            <div class="screen" id="s-areas">
+                <div class="content">
+                    <h1>Was belastet Dich?</h1>
+                    <p class="subtitle">Wähle 2-3 Bereiche (nicht "Nicht relevant")</p>
+                    <div id="error"></div>
+                    
+                    <div style="margin-bottom: 28px;">
+                        <div style="font-weight: 700; margin-bottom: 14px; color: #FFF;">💼 Jobsicherheit</div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="job" value="no"> <span>Nicht relevant</span></label>
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="job" value="mild"> <span>Leichte Sorge</span></label>
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="job" value="mod"> <span>Moderate Angst</span></label>
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="job" value="high"> <span>Starke Angst</span></label>
+                        </div>
                     </div>
-                    <div class="benefit-item">
-                        <span class="benefit-icon">✓</span>
-                        <span>Tracking: "Welche Übungen helfen mir wirklich?"</span>
+                    
+                    <div style="margin-bottom: 28px;">
+                        <div style="font-weight: 700; margin-bottom: 14px; color: #FFF;">💰 Finanzen</div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="money" value="no"> <span>Nicht relevant</span></label>
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="money" value="mild"> <span>Leichte Sorge</span></label>
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="money" value="mod"> <span>Moderate Unsicherheit</span></label>
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="money" value="high"> <span>Starke Angst</span></label>
+                        </div>
                     </div>
-                    <div class="benefit-item">
-                        <span class="benefit-icon">✓</span>
-                        <span>Wöchentliche Fortschrittsberichte</span>
+                    
+                    <div style="margin-bottom: 28px;">
+                        <div style="font-weight: 700; margin-bottom: 14px; color: #FFF;">😴 Schlaf & Energie</div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="health" value="no"> <span>Alle gut</span></label>
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="health" value="mild"> <span>Manchmal Probleme</span></label>
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="health" value="mod"> <span>Regelmäßig gestört</span></label>
+                            <label style="display: flex; gap: 10px; cursor: pointer; align-items: center;"><input type="radio" name="health" value="high"> <span>Chronisch gestört</span></label>
+                        </div>
                     </div>
-                    <div class="benefit-item">
-                        <span class="benefit-icon">✓</span>
-                        <span>Keine Werbung, keine Manipulation</span>
+                    
+                    <button class="btn btn-primary" onclick="validateAreas()">Weiter</button>
+                </div>
+            </div>
+            
+            <!-- PHQ SCREEN -->
+            <div class="screen" id="s-phq">
+                <div class="content">
+                    <h1>Dein Zustand</h1>
+                    <p class="subtitle">Letzte 2 Wochen – ehrlich</p>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <div style="font-weight: 700; margin-bottom: 10px; color: #FFF;">1. Niedergeschlagen, traurig?</div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                            <button class="scale-btn" onclick="setQ('phq','sad',0)">Nie</button>
+                            <button class="scale-btn" onclick="setQ('phq','sad',1)">1-2x</button>
+                            <button class="scale-btn" onclick="setQ('phq','sad',2)">5+x</button>
+                            <button class="scale-btn" onclick="setQ('phq','sad',3)">Täglich</button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <div style="font-weight: 700; margin-bottom: 10px; color: #FFF;">2. Schlafprobleme?</div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                            <button class="scale-btn" onclick="setQ('phq','sleep',0)">Nie</button>
+                            <button class="scale-btn" onclick="setQ('phq','sleep',1)">1-2x</button>
+                            <button class="scale-btn" onclick="setQ('phq','sleep',2)">5+x</button>
+                            <button class="scale-btn" onclick="setQ('phq','sleep',3)">Jede Nacht</button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <div style="font-weight: 700; margin-bottom: 10px; color: #FFF;">3. Müde, energielos?</div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                            <button class="scale-btn" onclick="setQ('phq','energy',0)">Nie</button>
+                            <button class="scale-btn" onclick="setQ('phq','energy',1)">Manchmal</button>
+                            <button class="scale-btn" onclick="setQ('phq','energy',2)">Oft</button>
+                            <button class="scale-btn" onclick="setQ('phq','energy',3)">Immer</button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <div style="font-weight: 700; margin-bottom: 10px; color: #FFF;">4. Nervös, angespannt?</div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                            <button class="scale-btn" onclick="setQ('phq','anxiety',0)">Nie</button>
+                            <button class="scale-btn" onclick="setQ('phq','anxiety',1)">Manchmal</button>
+                            <button class="scale-btn" onclick="setQ('phq','anxiety',2)">Oft</button>
+                            <button class="scale-btn" onclick="setQ('phq','anxiety',3)">Ständig</button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <div style="font-weight: 700; margin-bottom: 10px; color: #FFF;">5. Sorgen unkontrollierbar?</div>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                            <button class="scale-btn" onclick="setQ('phq','worry',0)">Nie</button>
+                            <button class="scale-btn" onclick="setQ('phq','worry',1)">Manchmal</button>
+                            <button class="scale-btn" onclick="setQ('phq','worry',2)">Oft</button>
+                            <button class="scale-btn" onclick="setQ('phq','worry',3)">Ja, immer</button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="btn-phq" onclick="go('tcm')" disabled>Weiter</button>
+                </div>
+            </div>
+            
+            <!-- TCM SCREEN -->
+            <div class="screen" id="s-tcm">
+                <div class="content">
+                    <h1>Körpersymptome</h1>
+                    <p class="subtitle">Wie funktioniert Dein Körper?</p>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <div style="font-weight: 700; margin-bottom: 10px; color: #FFF;">Schlafqualität?</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                            <button class="scale-btn" onclick="setQ('tcm','sleep','bad')">Schlecht</button>
+                            <button class="scale-btn" onclick="setQ('tcm','sleep','ok')">Okay</button>
+                            <button class="scale-btn" onclick="setQ('tcm','sleep','good')">Gut</button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <div style="font-weight: 700; margin-bottom: 10px; color: #FFF;">Temperatur-Vorliebe?</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                            <button class="scale-btn" onclick="setQ('tcm','temp','cold')">Kälte</button>
+                            <button class="scale-btn" onclick="setQ('tcm','temp','neutral')">Egal</button>
+                            <button class="scale-btn" onclick="setQ('tcm','temp','hot')">Wärme</button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <div style="font-weight: 700; margin-bottom: 10px; color: #FFF;">Verdauung?</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                            <button class="scale-btn" onclick="setQ('tcm','digest','loose')">Locker</button>
+                            <button class="scale-btn" onclick="setQ('tcm','digest','normal')">Normal</button>
+                            <button class="scale-btn" onclick="setQ('tcm','digest','hard')">Verstopfung</button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 24px;">
+                        <div style="font-weight: 700; margin-bottom: 10px; color: #FFF;">Energielevel (1-10)?</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                            <button class="scale-btn" onclick="setQ('tcm','energy','1')">1-2</button>
+                            <button class="scale-btn" onclick="setQ('tcm','energy','5')">3-6</button>
+                            <button class="scale-btn" onclick="setQ('tcm','energy','8')">7-10</button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="btn-tcm" onclick="calculatePattern()" disabled>Diagnose</button>
+                </div>
+            </div>
+            
+            <!-- DIAGNOSIS SCREEN -->
+            <div class="screen" id="s-diagnosis">
+                <div class="content">
+                    <h2 id="diag-title"></h2>
+                    
+                    <div class="practice-card">
+                        <div class="card-title">Was mit Dir passiert</div>
+                        <div class="card-text" id="diag-p1"></div>
+                    </div>
+                    
+                    <div class="practice-card">
+                        <div class="card-title">Dein Nervensystem</div>
+                        <div class="card-text" id="diag-p2"></div>
+                    </div>
+                    
+                    <div class="practice-card">
+                        <div class="card-title">Dein Pattern (TCM)</div>
+                        <div class="card-text" id="diag-p3"></div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="goTraining()">Starte 7-Tage-Training</button>
+                </div>
+            </div>
+            
+            <!-- TRAINING: DAY SCREEN -->
+            <div class="screen" id="s-training">
+                <div class="content">
+                    <div class="training-header">
+                        <div class="day-badge" id="day-badge">Tag 1 von 7</div>
+                        <h1 id="training-title">Dein Reset</h1>
+                        <p class="subtitle" id="training-sub">Eine Übung. Das ist alles.</p>
+                    </div>
+                    
+                    <div class="streak-display">
+                        <div class="streak-number" id="streak-num">1</div>
+                        <div class="streak-label">Tag am Stück</div>
+                    </div>
+                    
+                    <div class="practice-card">
+                        <div class="card-title" id="p-title"></div>
+                        <div class="card-meta" id="p-time"></div>
+                        <div class="card-text" id="p-desc"></div>
+                        
+                        <div class="expand-toggle" onclick="toggleExp('exp')">+ HOW-TO & WARUM</div>
+                        
+                        <div class="expanded" id="exp">
+                            <div class="section-header">Schritt für Schritt</div>
+                            <ol class="step-list" id="steps"></ol>
+                            
+                            <div class="section-header" style="margin-top: 14px;">Warum das funktioniert</div>
+                            <div class="section-body" id="why"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="feedback-container">
+                        <div class="feedback-label">Hat es heute geholfen?</div>
+                        <div class="feedback-scale" id="feedback"></div>
+                        <textarea class="notes-input" id="notes" placeholder="Optional: Wie war Deine Erfahrung?"></textarea>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="saveDayFeedback()">Speichern & Tag 2 Freischalten</button>
+                </div>
+            </div>
+            
+            <!-- PRACTICE LIBRARY -->
+            <div class="screen" id="s-library">
+                <div class="content">
+                    <h1>Praxis-Bibliothek</h1>
+                    <p class="subtitle">50+ Übungen für Dein Pattern</p>
+                    
+                    <input class="search-box" id="search" type="text" placeholder="Suche nach: Atem, Bewegung, Zeit..." onkeyup="filterLibrary()">
+                    
+                    <div class="filter-tabs" id="filters"></div>
+                    
+                    <div id="library-list"></div>
+                </div>
+            </div>
+            
+            <!-- PROGRESS DASHBOARD -->
+            <div class="screen" id="s-progress">
+                <div class="content">
+                    <h1>Dein Fortschritt</h1>
+                    <p class="subtitle">7-Tage-Tracking</p>
+                    
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-days">1</div>
+                            <div class="stat-label">Tage abgeschlossen</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="stat-rating">-</div>
+                            <div class="stat-label">Ø Feedback</div>
+                        </div>
+                    </div>
+                    
+                    <h2 style="margin-top: 32px; margin-bottom: 16px;">Deine Woche</h2>
+                    <div id="week-tracker"></div>
+                </div>
+            </div>
+            
+            <!-- SETTINGS -->
+            <div class="screen" id="s-settings">
+                <div class="content">
+                    <h1>Einstellungen</h1>
+                    
+                    <div class="practice-card">
+                        <div class="card-title">Mein Pattern</div>
+                        <div class="card-text" id="pattern-name">-</div>
+                        <button class="btn btn-secondary" onclick="resetAssessment()" style="margin-top: 14px; margin-bottom: 0;">Neu-Assessment</button>
+                    </div>
+                    
+                    <div class="practice-card">
+                        <div class="card-title">Daten</div>
+                        <button class="btn btn-secondary" onclick="exportData()" style="margin-top: 14px; margin-bottom: 0;">Daten exportieren</button>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- SCREEN 7: SUCCESS -->
-        <div class="screen" id="screen-success">
-            <h1>✓ Willkommen</h1>
-            <p class="subtitle">Dein 7-Tage-Training startet jetzt. Öffne die App morgen für Tag 1.</p>
-            
-            <div class="diagnosis-box">
-                <div class="diagnosis-section">
-                    <div class="diagnosis-label">Deine Zusammenfassung</div>
-                    <div class="summary-stat">
-                        <span class="stat-label">Dein Pattern:</span>
-                        <span class="stat-value" id="summary-pattern"></span>
-                    </div>
-                    <div class="summary-stat">
-                        <span class="stat-label">Belastete Bereiche:</span>
-                        <span class="stat-value" id="summary-areas"></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="callout">
-                <strong>Nächster Schritt:</strong> Öffne morgen die App und mach Tag 1 (15 Minuten). 
-                Danach weißt Du: Funktioniert das für mich oder nicht.
-            </div>
-            
-            <p style="color: var(--sub); margin-top: 30px; text-align: center; font-size: 0.89rem;">
-                💬 Fragen? support@getenerygyback.de
-            </p>
+        <!-- BOTTOM NAV -->
+        <div class="bottom-nav" id="nav" style="display: none;">
+            <button class="nav-btn active" onclick="goNav('training')"><div class="nav-icon">📅</div>Training</button>
+            <button class="nav-btn" onclick="goNav('library')"><div class="nav-icon">📚</div>Bibliothek</button>
+            <button class="nav-btn" onclick="goNav('progress')"><div class="nav-icon">📊</div>Fortschritt</button>
+            <button class="nav-btn" onclick="goNav('settings')"><div class="nav-icon">⚙️</div>Einstellungen</button>
         </div>
     </div>
 
     <script>
-        let startTime = Date.now();
-        let selectedAreas = [];
-        let phqScores = {};
-        let tcmScores = {};
-        const screens = ['intro', 'areas', 'phq', 'tcm', 'diagnosis', 'paywall', 'success'];
+        // STATE & STORAGE
+        let state = {
+            pattern: 'MultiStress',
+            day: 1,
+            completed: [],
+            feedback: {},
+            areas: {}
+        };
         
-        // TIMER
-        setInterval(() => {
-            const elapsed = Math.floor((Date.now() - startTime) / 1000);
-            const mins = Math.floor(elapsed / 60);
-            const secs = elapsed % 60;
-            document.getElementById('timer').textContent = `⏱️ ${mins}:${secs.toString().padStart(2, '0')}`;
-        }, 1000);
+        function save() { localStorage.setItem('state', JSON.stringify(state)); }
+        function load() { const s = localStorage.getItem('state'); if(s) state = JSON.parse(s); }
         
-        function showScreen(name) {
-            screens.forEach(s => {
-                const el = document.getElementById(`screen-${s}`);
-                if (el) el.classList.remove('active');
-            });
-            const target = document.getElementById(`screen-${name}`);
-            if (target) target.classList.add('active');
-            
-            const index = screens.indexOf(name);
-            document.getElementById('progress').style.width = ((index / (screens.length - 1)) * 100) + '%';
-            window.scrollTo(0, 0);
+        // NAVIGATION
+        function go(s) {
+            document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
+            document.getElementById(`s-${s}`)?.classList.add('active');
+            const screens = ['intro','areas','phq','tcm','diagnosis'];
+            const idx = screens.indexOf(s);
+            document.getElementById('prog').style.width = ((idx/(screens.length-1))*100) + '%';
+            window.scrollTo(0,0);
         }
         
-        function startAssessment() { showScreen('areas'); }
+        function goNav(s) {
+            go(s);
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            event.target.closest('.nav-btn').classList.add('active');
+        }
+        
+        function goTraining() {
+            state.day = 1;
+            save();
+            document.getElementById('nav').style.display = 'flex';
+            go('training');
+            setupDay();
+        }
+        
+        // QUESTIONS
+        function setQ(type, key, val) {
+            if(type === 'phq') {
+                if(!state.phq) state.phq = {};
+                state.phq[key] = val;
+                document.querySelectorAll('.scale-btn').forEach(b => {
+                    if(b.parentElement.querySelector('input') === event.target) {
+                        b.classList.remove('selected');
+                    }
+                });
+                event.target.classList.add('selected');
+                const ok = Object.keys(state.phq || {}).length === 5;
+                document.getElementById('btn-phq').disabled = !ok;
+            } else if(type === 'tcm') {
+                if(!state.tcm) state.tcm = {};
+                state.tcm[key] = val;
+                event.target.classList.add('selected');
+                event.target.parentElement.querySelectorAll('button').forEach(b => {
+                    if(b !== event.target) b.classList.remove('selected');
+                });
+                const ok = Object.keys(state.tcm || {}).length === 4;
+                document.getElementById('btn-tcm').disabled = !ok;
+            }
+        }
         
         function validateAreas() {
-            selectedAreas = Array.from(document.querySelectorAll('#screen-areas input:checked')).map(e => e.value);
-            const errorMsg = document.getElementById('error-msg');
-            
-            if (selectedAreas.length < 2) {
-                errorMsg.innerHTML = '<div class="error-msg">Bitte wähle mindestens 2 Bereiche.</div>';
+            const job = document.querySelector('input[name="job"]:checked')?.value;
+            const money = document.querySelector('input[name="money"]:checked')?.value;
+            const health = document.querySelector('input[name="health"]:checked')?.value;
+            const active = [job,money,health].filter(v => v !== 'no').length;
+            if(active < 2) {
+                document.getElementById('error').innerHTML = '<div class="error">Mindestens 2 Bereiche wählen</div>';
                 return;
             }
-            errorMsg.innerHTML = '';
-            showScreen('phq');
+            state.areas = {job,money,health};
+            save();
+            go('phq');
         }
         
-        function setPhq(key, value) {
-            phqScores[key] = value;
-            event.target.classList.add('selected');
-            event.target.parentElement.querySelectorAll('button').forEach(b => {
-                if (b !== event.target) b.classList.remove('selected');
-            });
-            checkPhqComplete();
-        }
-        
-        function checkPhqComplete() {
-            const allSet = Object.keys(phqScores).length === 5;
-            document.getElementById('btn-next-tcm').disabled = !allSet;
-        }
-        
-        function nextScreen(name) { showScreen(name); }
-        
-        function setTcm(key, value) {
-            tcmScores[key] = value;
-            event.target.classList.add('selected');
-            event.target.parentElement.querySelectorAll('button').forEach(b => {
-                if (b !== event.target) b.classList.remove('selected');
-            });
-            checkTcmComplete();
-        }
-        
-        function checkTcmComplete() {
-            const allSet = Object.keys(tcmScores).length === 4;
-            document.getElementById('btn-calculate').disabled = !allSet;
-        }
-        
-        // DIAGNOSIS ENGINE
-        function calculateDiagnosis() {
-            const phqScore = Object.values(phqScores).reduce((a, b) => a + b, 0);
-            const energyLevel = parseInt(tcmScores.energy) || 5;
-            const sleepQuality = tcmScores.sleep;
+        function calculatePattern() {
+            const phqScore = Object.values(state.phq || {}).reduce((a,b) => a+b, 0);
+            const sleep = state.tcm?.sleep;
+            let pattern = 'MultiStress';
+            if(state.areas.job !== 'no' && phqScore >= 12 && sleep === 'bad') pattern = 'JobHigh';
+            else if(state.areas.money !== 'no') pattern = 'MoneyStress';
             
-            let diagTitle = '';
-            let diagPattern = '';
-            let diagNeuro = '';
-            let diagTcm = '';
-            let practices = [];
+            state.pattern = pattern;
             
-            // JOB SECURITY
-            if (selectedAreas.includes('job')) {
-                if (phqScore >= 12 && sleepQuality === 'poor') {
-                    diagTitle = '木 Leber-Qi blockiert';
-                    diagPattern = 'Das ist nicht rational. Es ist biologisch. Dein Körper sieht Gefahr und schaltet den Notfall-Modus ein. Das ist nicht Deine Schuld – das ist Überlebens-Instinkt.';
-                    diagNeuro = 'In Deinem Gehirn läuft das ab: Deine Angststelle (Amygdala) schreit "Gefahr!" Deine Entscheidungsstelle (Präfrontalkortex) schaltet aus. Resultat: Du denkst nicht klar. Du machst Fehler. Dein Körper ist in Kampf-oder-Flucht-Modus.';
-                    diagTcm = 'Nach TCM: Die Leber kontrolliert, wie Energie fließt. Job-Angst blockiert diesen Fluss. Das erzeugt innere Spannung. Diese Spannung wird zu Hitze: Schlaflosigkeit, Gedankenrasen, Wut.';
-                    practices = [
-                        { title: '🌬️ Box Breathing', time: '5 Min', desc: 'Einatmen 4 sec, Halten 4 sec, Ausatmen 4 sec, Halten 4 sec. 5-10x wiederholen. Das signalisiert Deinem Nervensystem: "Es ist sicher." Wirkung: Sofort.' },
-                        { title: '❄️ Kaltwasser-Schock', time: '30 sec', desc: 'Eiskaltes Wasser ins Gesicht oder Hände für 30 sec. Das triggert Deinen Tauch-Reflex und verlangsamt Herzfrequenz sofort.' },
-                        { title: '💪 Intensive Bewegung', time: '20-30 Min', desc: 'Sprinting, Krafttraining, schnell Treppenlaufen. Das verbrennt Stress-Hormone (Adrenalin, Cortisol). Danach: Dein Kopf ist klarer.' },
-                        { title: '📝 Gedanken dokumentieren', time: '10 Min', desc: 'Schreib auf: "Ich werde gefeuert." Dann: Was spricht dafür? Was dagegen? Reframe: "Es ist möglich, aber nicht sicher." Das re-engagiert Deinen Verstand.' }
-                    ];
-                } else {
-                    diagTitle = '💼 Job-Angst (moderat)';
-                    diagPattern = 'Die Angst ist da, aber nicht übergroß. Das bedeutet: Du hast noch Handlungsfähigkeit.';
-                    diagNeuro = 'Amygdala ist aktiv, aber Präfrontalkortex funktioniert noch. Du kannst strategisch handeln.';
-                    diagTcm = 'Leber-Qi ist leicht blockiert, nicht total.';
-                    practices = [
-                        { title: '🎯 Kontroll-Mapping', time: '10 Min', desc: 'Schreib zwei Listen: (1) Was kannst Du kontrollieren? (Skills, CV, Netzwerk) (2) Was nicht? (Wirtschaft, Firmenentscheidungen). Konzentriere Dich auf #1.' },
-                        { title: '🚶 Spazieren gehen', time: '30 Min', desc: 'Bewegung reguliert Nervensystem. Beim Spazieren denkst Du natürlicherweise klarer.' },
-                        { title: '💬 Ein Gespräch', time: '15 Min', desc: 'Ruf eine Vertrauensperson an. Nicht für Mitleid – für Perspektive. "Wie würdest Du denken?"' }
-                    ];
+            const dx = {
+                'JobHigh': {
+                    title: '木 Leber-Qi Stagnation',
+                    p1: 'Jobangst triggert existenzielle Unsicherheit. Das ist nicht rational – das ist biologisch.',
+                    p2: 'Deine Amygdala (Angststelle) schaltet sich ein. Präfrontalkortex (Verstand) schaltet aus.',
+                    p3: 'Leber-Qi ist blockiert. Innere Spannung wird zu Hitze: Schlaflosigkeit, Gedankenrasen, Wut.'
+                },
+                'MoneyStress': {
+                    title: '土 Erde Element (Unsicherheit)',
+                    p1: 'Finanzielle Unsicherheit ist ein Kontrolle-Problem, nicht Ressourcen-Problem.',
+                    p2: 'Kontinuierliche mentale Last: "Kann ich überleben?" lädt in den RAM und kann nicht abschalten.',
+                    p3: 'Erde Element (Vertrauen, Verdauung) ist destabilisiert. Du brauchst Grenzen, nicht Perfekt-Sein.'
+                },
+                'MultiStress': {
+                    title: '⚖️ Mehrfach-Belastung',
+                    p1: 'Du jonglierst nicht eine Krise – mehrere. Das ist körperlich anstrengend.',
+                    p2: 'Amygdala in Dauer-Alarm. Präfrontalkortex chronisch überlastet.',
+                    p3: 'Mehrere Funktionen sind leicht destabilisiert. Du brauchst externe Struktur.'
                 }
-            }
-            // MONEY STRESS
-            else if (selectedAreas.includes('money')) {
-                diagTitle = '土 Erde Element (Unsicherheit)';
-                diagPattern = 'Das ist nicht ein Ressourcen-Problem. Das ist ein Kontrolle-Problem. Dein Nervensystem kann sich nicht entspannen ohne Vorhersagbarkeit.';
-                diagNeuro = 'Finanzielle Unsicherheit erzeugt kontinuierliche mentale Last. Dein Gehirn lädt "Kann ich überleben?" in den RAM und kann nicht abschalten. Die Lösung: Künstliche Vorhersagbarkeit (Grenzen).';
-                diagTcm = 'Erde Element (Vertrauen, Verdauung) ist destabilisiert. Du brauchst keine perfekten Zahlen. Du brauchst GRENZEN. Definiere einfach: Max €X pro Woche. Punkt. Fertig.';
-                practices = [
-                    { title: '📊 Budget-Grenze setzen', time: '5 Min', desc: 'Schreib auf: "Ich gebe max €[X] pro Woche aus." Das ist nicht perfekt. Das ist einfach eine GRENZE. Dein Nervensystem braucht die Grenze mehr als Perfektion.' },
-                    { title: '🌍 Erdungs-Ritual', time: '10 Min', desc: 'Barfuß auf Gras oder Erde laufen. Das aktiviert buchstäblich und psychologisch "Grounding" – ein stabiles Gefühl.' },
-                    { title: '🍲 Nährende Mahlzeiten', time: '30 Min/Tag', desc: 'Warme, einfache Mahlzeiten (Suppen, Getreide, root vegetables). Nicht Diät. Dein Gehirn braucht das Gefühl "Ich bin versorgt."' }
-                ];
-            }
-            // MULTIPLE STRESSORS
-            else {
-                diagTitle = '⚖️ Mehrfach-Belastung';
-                diagPattern = 'Du jonglierst nicht eine Krise – mehrere gleichzeitig. Das ist körperlich anstrengend.';
-                diagNeuro = 'Mit mehreren Stressoren: Amygdala ist in Dauer-Alarm. Präfrontalkortex ist chronisch überlastet.';
-                diagTcm = 'Mehrere Organs sind leicht destabilisiert. Du brauchst Struktur, nicht Perfekt-Sein.';
-                practices = [
-                    { title: '📅 Wöchentliche Struktur', time: '30 Min Setup', desc: 'Definiere: Montag = Fokus A, Mittwoch = Fokus B, Freitag = Fokus C. Das reduziert mentale Last. Dein Gehirn muss nicht ALLES gleichzeitig jonglieren.' },
-                    { title: '🔄 Tägliches Review', time: '5 Min', desc: 'Was funktionierte heute? Was nicht? Morgen: Nur das, was funktioniert. Das ist nicht Perfektionismus – das ist Lernen.' },
-                    { title: '🚨 Priorität neu bewerten', time: 'Wöchentlich', desc: 'Was ist WIRKLICH dringend diese Woche? Alles andere wartet. Dein Gehirn braucht Klarheit über "Muss jetzt" vs. "Kann warten".' }
-                ];
-            }
-            
-            // DISPLAY
-            document.getElementById('diagnosis-title').textContent = diagTitle;
-            document.getElementById('diagnosis-pattern').textContent = diagPattern;
-            document.getElementById('diagnosis-neuro').textContent = diagNeuro;
-            document.getElementById('diagnosis-tcm').textContent = diagTcm;
-            
-            const practicesHtml = practices.map(p => `
-                <div class="practice-box">
-                    <div class="practice-title">${p.title}</div>
-                    <div class="practice-time">⏱️ ${p.time}</div>
-                    <div class="practice-desc">${p.desc}</div>
-                </div>
-            `).join('');
-            document.getElementById('practices-container').innerHTML = practicesHtml;
-            
-            // SAVE
-            const data = {
-                areas: selectedAreas.join(', '),
-                phqScore: phqScore,
-                pattern: diagTitle,
-                timestamp: new Date().toISOString(),
-                time: Math.floor((Date.now() - startTime) / 1000)
-            };
-            localStorage.setItem('assessment', JSON.stringify(data));
-            
-            showScreen('diagnosis');
-        }
-        
-        function completePurchase() {
-            const data = JSON.parse(localStorage.getItem('assessment'));
-            data.purchased = true;
-            localStorage.setItem('assessment', JSON.stringify(data));
-            
-            const areaLabels = {
-                'job': 'Jobsicherheit',
-                'money': 'Finanzen',
-                'health': 'Schlaf & Energie',
-                'relationship': 'Beziehungen',
-                'news': 'News & Welt',
-                'future': 'Zukunft'
             };
             
-            const selectedLabels = selectedAreas.map(a => areaLabels[a]).join(', ');
-            document.getElementById('summary-areas').textContent = selectedLabels;
-            document.getElementById('summary-pattern').textContent = document.getElementById('diagnosis-title').textContent;
-            
-            showScreen('success');
+            const d = dx[pattern];
+            document.getElementById('diag-title').textContent = d.title;
+            document.getElementById('diag-p1').textContent = d.p1;
+            document.getElementById('diag-p2').textContent = d.p2;
+            document.getElementById('diag-p3').textContent = d.p3;
+            save();
+            go('diagnosis');
         }
         
-        function skipPaywall() {
-            completePurchase();
+        // TRAINING
+        const practices = {
+            'JobHigh': [
+                {day:1,title:'🌬️ Box Breathing',time:'5 Min',desc:'Einatmen 4s, Halten 4s, Ausatmen 4s, Halten 4s. 5-10x. Signal: "Es ist sicher."',steps:['Sitze aufrecht','Atme ein 4s','Halte 4s','Atme aus 4s','Halte 4s','Wiederhole 5-10x'],why:'Aktiviert Vagusnerv. Signalisiert Sicherheit. Sofort-Effekt.'},
+                {day:2,title:'💪 Intensive Bewegung',time:'20-30 Min',desc:'Sprinting, Krafttraining, schnell Treppen. ALLES ist okay. Ziel: Adrenalin abbau.',steps:['Wähle Aktivität','Beginne leicht, baue auf','Ziel: außer Atem','20-30 Min','Cool-down 2-3 Min'],why:'Chronischer Stress hinterlässt Adrenalin. Sport verbrennt das.'},
+                {day:3,title:'📝 Gedanken-Check',time:'10 Min',desc:'Schreib auf: "Ich werde gefeuert." Dann: Evidenz dafür, Evidenz dagegen. Reframe.',steps:['Schreib die Angst','Spalte: FÜR | GEGEN','Sammle auf beiden Seiten','Unten: Reframe in Realität'],why:'Aktiviert Präfrontalkortex. Amygdala verliert Macht.'},
+                {day:4,title:'🎯 Kontroll-Mapping',time:'15 Min',desc:'Was kannst Du kontrollieren? Was nicht? Konzentriere auf #1.',steps:['Spalte: KONTROLLE | KEINE','Liste beide','Markiere: Was diese Woche?'],why:'Fokus auf Kontrollierbar = weniger Angst sofort.'},
+                {day:5,title:'📅 4-Wochen-Plan',time:'20 Min',desc:'Was machst Du JEDE WOCHE die nächsten 4 Wochen? Kleine Dinge.',steps:['Woche 1: Fokus = [Eine Sache]','Woche 2: Fokus = [Nächste]','Woche 3: Fokus = [Z.B. Skill]','Woche 4: Review'],why:'Externe Struktur kompensiert für interne Angst.'},
+                {day:6,title:'💬 Ein Gespräch',time:'20-30 Min',desc:'Ruf Vertrauensperson an. Nicht für Mitleid – für Perspektive.',steps:['Wähle jemanden','Sag: Ich brauche Perspektive','Teile Angst','Frag: Was würdest Du tun?'],why:'Isolation verstärkt Angst. Andere Perspektiven brechen verzerrte Muster auf.'},
+                {day:7,title:'📊 Wochenreview',time:'15 Min',desc:'Was funktionierte? Was nicht? Welche 3 Dinge nächste Woche anders?',steps:['Was war POSITIV?','Was war SCHWIERIG?','Box Breathing – funktioniert?','3 konkrete Verbesserungen'],why:'Reflexion = Lernen. Nervensystem registriert: Ich mache Fortschritt.'}
+            ],
+            'MoneyStress': [
+                {day:1,title:'📊 Budget-Grenze',time:'5 Min',desc:'Schreib: "Ich gebe max €[X] pro Woche aus." NICHT perfekt. Einfach GRENZE.',steps:['Öffne Dokument','Schreib Grenze','Wähle Zahl (SICHER, nicht perfekt)','Hänge auf','Nutze ab morgen'],why:'Dein Nervensystem braucht Grenze mehr als Perfekt.'},
+                {day:2,title:'🌍 Erdungs-Ritual',time:'10 Min',desc:'Barfuß auf Gras/Erde. Das aktiviert buchstäblich Grounding.',steps:['Gehe nach draußen','Ziehe Schuhe aus','Stehe 1-2 Min auf Erde','Spüre Kontakt','Atme langsam'],why:'Physischer Bodenkontakt = psychologische Stabilität.'},
+                {day:3,title:'🍲 Nährende Mahlzeiten',time:'30 Min/Tag',desc:'Warme, einfache Mahlzeiten. NICHT Diät. Gefühl "Ich bin versorgt."',steps:['Heute: Suppe','Morgen: Warmes Getreide','Nächste: Root vegetables','NICHT Diät. Gefühl.'],why:'Erde Element braucht warm + nährend.'},
+                {day:4,title:'📋 Finanz-Inventur',time:'30 Min',desc:'Öffne Konten. Schaue auf die Zahlen. NICHT verdrängen, sondern verstehen.',steps:['Öffne alle Konten','Schreib Monatliches','Schreib Fixkosten','Schreib Ersparnisse','Unten: REALITÄT'],why:'Unsicherheit = Imaginäre Katastrophen. Realität = meist kleiner.'},
+                {day:5,title:'💡 Verdienst-Brainstorm',time:'20 Min',desc:'Was KÖNNTEST Du tun? Nichts ist zu klein. Brainstorm.',steps:['Alle Fähigkeiten aufschreiben','Kleine Gigs','Investitionen','Dinge zum Verkaufen','KEINE Urteile'],why:'Optionen = Handlungsfähigkeit.'},
+                {day:6,title:'🎯 Erste Aktion',time:'30-60 Min',desc:'Wähle eine Verdienst-Idee. Mache einen Schritt HEUTE.',steps:['Wähle Option','Definiere Schritt 1','Mache Schritt 1 HEUTE','Dokumentiere','Notiere Schritt 2'],why:'Eine echte Aktion = Nervensystem registriert: Nicht hilflos.'},
+                {day:7,title:'📊 Finanz-Review',time:'20 Min',desc:'Was hat geholfen? Was verstanden? Nächste Woche?',steps:['Budget-Grenze – gelebt?','Erdung – wie oft?','Nährung – Effekt?','Finanz-Realität – Überraschungen?'],why:'Reflexion = Du siehst Fortschritt.'}
+            ],
+            'MultiStress': [
+                {day:1,title:'📅 Wöchentliche Struktur',time:'10 Min',desc:'Montag=Fokus A, Mittwoch=Fokus B, Freitag=Fokus C. Rest: Wartung.',steps:['Schreib 3 Hauptprobleme','Weise jedem Tag zu','Rest: Wartungs-Tasks','Wochenende: Erholung'],why:'Gehirn kann nicht ALLES jonglieren.'},
+                {day:2,title:'🌬️ Box Breathing',time:'5 Min',desc:'Wenn zu viel: 4-4-4-4 atmen. 5 Min. Notfall-Button.',steps:['Sitze hin','Einatmen 4s, Halten, Ausatmen, Halten','5-10x'],why:'5 Min = Neue Perspektive sofort.'},
+                {day:3,title:'⏰ Tägliche Routine',time:'30 Min Setup',desc:'Aufwach-Zeit, Schlaf-Zeit, Essen-Zeit. NICHT mehr, weniger Entscheidungen.',steps:['Aufwach-Zeit (jeden Tag gleich)','Schlaf-Zeit (jeden Tag gleich)','3x Essen (feste Zeit)','KEINE Optionen'],why:'Externe Routine = Interne Stabilität.'},
+                {day:4,title:'🚶 Tägliches Spazieren',time:'20-30 Min',desc:'Nicht trainieren. Nicht schnell. Einfach gehen.',steps:['Zeitpunkt: Morgens oder Mittags','20-30 Min','Nicht Fitness, sondern Regulation','Phone weg'],why:'Beim Gehen denkt Gehirn klarer. Stress löst sich.'},
+                {day:5,title:'📝 Gedanken-Dump',time:'10 Min',desc:'Schreib ALLES auf was im Kopf. Keine Struktur. Alles raus.',steps:['Öffne Dokument','Schreib ALLES','10 Min','Speichern und vergessen'],why:'Was im Kopf belastet. Was auf Papier hat weniger Macht.'},
+                {day:6,title:'🚨 Prioritäten-Neu',time:'15 Min',desc:'Was ist WIRKLICH dringend? DIESE Woche: Max 3 Dinge.',steps:['Schreib alles auf','Teile: DIESE Woche | Kann warten','DIESE WOCHE: Max 3','Alles andere: Kann warten'],why:'Gehirn braucht Klarheit über "Muss jetzt" vs "Kann warten".'},
+                {day:7,title:'📊 Wochenreview',time:'15 Min',desc:'Was funktionierte? Was brauchst Du nächste Woche?',steps:['Struktur – gelebt?','Box Breathing – genutzt?','Routine – gelebt?','Spazieren – täglich?','Gedanken-Dump – Relief?'],why:'Reflexion = Du erkennst, was FOR YOU funktioniert.'}
+            ]
+        };
+        
+        function setupDay() {
+            const p = practices[state.pattern]?.[state.day - 1] || practices['MultiStress'][0];
+            document.getElementById('day-badge').textContent = `Tag ${state.day} von 7`;
+            document.getElementById('p-title').textContent = p.title;
+            document.getElementById('p-time').textContent = `⏱️ ${p.time}`;
+            document.getElementById('p-desc').textContent = p.desc;
+            document.getElementById('steps').innerHTML = p.steps.map(s => `<li>${s}</li>`).join('');
+            document.getElementById('why').textContent = p.why;
+            document.getElementById('streak-num').textContent = state.day;
+            document.getElementById('streak-mini').textContent = state.day;
+            
+            // Feedback buttons
+            const fb = [1,2,3,4,5].map(n => `<button class="feedback-btn" onclick="setRating(${n})">${n}</button>`).join('');
+            document.getElementById('feedback').innerHTML = fb;
         }
+        
+        let rating = 0;
+        function setRating(r) { rating = r; document.querySelectorAll('.feedback-btn').forEach(b => b.classList.remove('selected')); event.target.classList.add('selected'); }
+        
+        function saveDayFeedback() {
+            state.completed.push(state.day);
+            if(!state.feedback) state.feedback = {};
+            state.feedback[state.day] = {rating, notes: document.getElementById('notes').value};
+            if(state.day < 7) state.day++;
+            save();
+            setupDay();
+            alert(`✓ Tag ${state.day - 1} gespeichert!`);
+        }
+        
+        function toggleExp(id) { document.getElementById(id).classList.toggle('active'); }
+        
+        // INIT
+        window.addEventListener('load', () => { load(); });
     </script>
 </body>
 </html>
